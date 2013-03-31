@@ -6,30 +6,50 @@
  * See COPYING or http://www.opensource.org/licenses/mit-license.php.
  */
 
-/** @brief Model of an HTTP request. */
+#include <stdlib.h>
+
+/**
+ * @brief Model of an HTTP request.
+ * @note Default values are provided by DEFAULT_HTTP_REQUEST.
+ */
 typedef struct {
-	char * method = "get"; /*!< HTTP method used for request. */
+	char * method; /*!< HTTP method used for request. */
 	char * url; /*!< URL being requested. */
-	float http_versioni = 1.1; /*!< HTTP version string (i.e. 1.1 for HTTP/1.1). */
+	float http_version; /*!< HTTP version string (i.e. 1.1 for HTTP/1.1). */
 
-	int headers_length = 0; /*!< Number of Headers being passed in this request. */
-	char * headers[]; /*!< Array of Headers as Strings of the form:
-	HEADER:VALUE. */
+	char * body; /*!< Optional Body of the request. */
 
-	char * body = NULL; /*!< Optional Body of the request. */
+	int headers_length; /*!< Number of Headers being passed in this request. */
+	char * headers[]; /*!< Array of Headers as Strings of the form: HEADER:VALUE. */
 } http_request;
 
-/** @brief Model of an HTTP response. */
+const http_request DEFAULT_HTTP_REQUEST = {
+	.method = "get",
+	.http_version = 1.1,
+	.headers_length = 0,
+	.body = NULL
+};
+
+/**
+ * @brief Model of an HTTP response.
+ * @note Default values are provided by DEFAULT_HTTP_RESPONSE.
+ */
 typedef struct {
-	float http_version = 1.1; /*!< @see http_request::http_version */
+	float http_version; /*!< @see http_request::http_version */
 	int status_code; /*!< HTTP Status Code returned. */
 	char * reason_phrase; /*!< HTTP Reason Phrase returned. */
 
-	int headers_length = 0; /*!< @see http_request::headers_length */
-	char * headers[]; /*!< @see http_request::headers */
+	char * body; /*!< @see http_request::body */
 
-	char * body = NULL; /*!< @see http_request::body */
+	int headers_length; /*!< @see http_request::headers_length */
+	char * headers[]; /*!< @see http_request::headers */
 } http_response;
+
+const http_response DEFAULT_HTTP_RESPONSE = {
+	.http_version = 1.1,
+	.headers_length = 0,
+	.body = NULL
+};
 
 /**
  * @brief Check request meets cloud files request limits.
@@ -40,7 +60,7 @@ typedef struct {
  *
  * @returns 1 if valid; otherwise NULL.
  */
-int check_request(const http_request & req);
+int check_request(const http_request * req);
 
 /**
  * @brief Add a header to an HTTP request.
@@ -51,7 +71,7 @@ int check_request(const http_request & req);
  *
  * @see http_request
  */
-void add_header(http_request & req, const char * header_name, const char * header_value);
+void add_header(http_request * req, const char * header_name, const char * header_value);
 
 /**
  * @brief Get a particular header's value from an HTTP request.
@@ -63,7 +83,7 @@ void add_header(http_request & req, const char * header_name, const char * heade
  *
  * @returns Header's Value (char *).
  */
-const char & get_header(const http_request & req, const char * header_name);
+const char * get_header(const http_request * req, const char * header_name);
 
 /**
  * @brief Perform an HTTP request given the passed parameters.
@@ -74,4 +94,4 @@ const char & get_header(const http_request & req, const char * header_name);
  * @returns An http_resposne.
  * @see http_response
  */
-http_response request(const http_request & req);
+const http_response * request(const http_request * req);

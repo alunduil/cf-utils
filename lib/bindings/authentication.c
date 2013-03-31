@@ -14,7 +14,7 @@
 
 int authenticate(char *user_name, char *api_key) {
 	http_request req;
-	http_response * resp;
+	const http_response * resp;
 
 	int url_index = 0;
 
@@ -23,18 +23,18 @@ int authenticate(char *user_name, char *api_key) {
 		"https://lon.identity.api.rackspacecloud.com/v1.0"
 	};
 
-	add_header(req, "X-Auth-User", user_name);
-	add_header(req, "X-Auth-Key", api_key);
+	add_header(&req, "X-Auth-User", user_name);
+	add_header(&req, "X-Auth-Key", api_key);
 
 	while (url_index++ < 2) {
 		req.url = urls[url_index];
-		resp = request(req);
+		resp = request(&req);
 
 		switch (resp->status_code) {
 			case 204:
-				auth_data.management_url = get_header(resp, "X-Storage-Url");
-				auth_data.cdn_management_url = get_header(resp, "X-CDN-Management-Url");
-				auth_data.token = get_header(resp, "X-Auth-Token");
+				auth_data.management_url = (char *)get_header((const http_request *)&resp, "X-Storage-Url");
+				auth_data.cdn_management_url = (char *)get_header((const http_request *)&resp, "X-CDN-Management-Url");
+				auth_data.token = (char *)get_header((const http_request *)&resp, "X-Auth-Token");
 
 				return 1;
 			case 401:
@@ -43,5 +43,5 @@ int authenticate(char *user_name, char *api_key) {
 		}
 	}
 
-	return NULL;
+	return (long)NULL;
 }

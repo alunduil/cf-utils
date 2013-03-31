@@ -10,8 +10,8 @@
 
 #include "bindings/helpers.h"
 
-int check_request(const http_request & req) {
-	if (req.headers_length > 90) return NULL;
+int check_request(const http_request * req) {
+	if (req->headers_length > 90) return (long)NULL;
 
 	/**
 	 * Check that headers are no longer than 4096 bytes.
@@ -28,7 +28,7 @@ int check_request(const http_request & req) {
 	return 1;
 }
 
-http_response request(const http_request & req) {
+const http_response * request(const http_request * req) {
 	CURL *curl_handle;
 	CURLcode result;
 
@@ -52,6 +52,6 @@ http_response request(const http_request & req) {
 		curl_easy_setopt(curl_handle, CURLOPT_READDATA, NULL); /*!< FILE * */
 #endif
 
-		curl_easy_setopt(curl_handle, CURLOPT_URL, req.url);
+		curl_easy_setopt(curl_handle, CURLOPT_URL, req->url);
 	}
 }

@@ -12,11 +12,16 @@
  * @todo Consider moving this to a static variable in a function call?
  */
 struct {
-	char * management_url = NULL; /*!< Endpoint URL for cloud files. */
-	char * cdn_management_url = NULL; /*!< Endpoint URL for CDN Management of cloud files. */
-	char * account_name = NULL; /*!< @todo Remove if already present in management URLs. */
-	char * token = NULL; /*!< Token for further request authentication. */
-} auth_data;
+	char * management_url; /*!< Endpoint URL for cloud files. */
+	char * cdn_management_url; /*!< Endpoint URL for CDN Management of cloud files. */
+	char * account_name; /*!< @todo Remove if already present in management URLs. */
+	char * token; /*!< Token for further request authentication. */
+} auth_data = {
+	.management_url = NULL,
+	.cdn_management_url = NULL,
+	.account_name = NULL,
+	.token = NULL
+};
 
 /**
  * @brief Authenticate the Cloud Account.
