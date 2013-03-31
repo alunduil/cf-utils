@@ -10,6 +10,24 @@
 
 #include "bindings/helpers.h"
 
+int check_request(const http_request & req) {
+	if (req.headers_length > 90) return NULL;
+
+	/**
+	 * Check that headers are no longer than 4096 bytes.
+	 */
+
+	/**
+	 * All lines are limited to 8192 bytes.
+	 */
+
+	/**
+	 * Maximum size of request: 5GB.
+	 */
+
+	return 1;
+}
+
 http_response request(const http_request & req) {
 	CURL *curl_handle;
 	CURLcode result;

@@ -18,3 +18,6 @@
 
 # KDevelop Artifacts
 *.kdev4
+
+# CMake
+build/

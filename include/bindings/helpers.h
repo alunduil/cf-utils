@@ -6,16 +6,6 @@
  * See COPYING or http://www.opensource.org/licenses/mit-license.php.
  */
 
-/**
- * @brief Global variable for authentication data.
- *
- * @todo Consider moving this to a static variable in a function call?
- */
-struct {
-	char * url = NULL; /*!< Endpoint URL for cloud files. */
-	char * token = NULL; /*!< Token for further request authentication. */
-} auth_data;
-
 /** @brief Model of an HTTP request. */
 typedef struct {
 	char * method; /*!< HTTP method used for request. */
@@ -40,6 +30,17 @@ typedef struct {
 
 	char * body = NULL; /*!< @see http_request::body */
 } http_response;
+
+/**
+ * @brief Check request meets cloud files request limits.
+ *
+ * @param[in] req HTTP Request
+ *
+ * @see http_request
+ *
+ * @returns 1 if valid; otherwise NULL.
+ */
+int check_request(const http_request & req);
 
 /**
  * @brief Add a header to an HTTP request.
