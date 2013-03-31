@@ -19,10 +19,17 @@ int get_account_property(PROPERTY_MAP property, int use_cache = 0) {
 
 	int cache[3] = { -1, -1, -1 };
 
-	if (!use_cache) {
+	if (
+		!use_cache ||
+		cache[CONTAINER_COUNT] < 0 ||
+		cache[OBJECT_COUNT] < 0 ||
+		cache[BYTE_COUNT] < 0
+	) {
 		add_header(req, "X-Auth-Token", auth_data.token);
 
 		req.url = auth_data.management_url;
+		req.method = "head";
+
 		resp = request(req);
 
 		switch (resp->status_code) {

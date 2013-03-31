@@ -31,6 +31,24 @@ enum {
  * @returns Requested property (int).
  *
  * @note Not intended for direct use.
+ *
+ * Example HTTP Request:
+ *
+ * HEAD /v1.0/jdoe HTTP/1.1
+ * Host: storage.clouddrive.com
+ * X-Auth-Token: eaaafd18-0fed-4b3a-81b4-663c99ec1cbb
+ *
+ * Example HTTP Response:
+ *
+ * HTTP/1.1 204 No Content
+ * Content-Type: text/html; charset=UTF-8
+ * X-Account-Object-Count: 12
+ * X-Trans-Id: txc44b00fccb6a49318626d3cac1d2cdb6
+ * Date: Tue, 06 Nov 2012 19:50:04 GMT
+ * X-Account-Bytes-Used: 10373619
+ * Content-Length: 0
+ * X-Account-Container-Count: 5
+ *
  */
 int get_account_property(PROPERTY_MAP property, int use_cache = 0);
 

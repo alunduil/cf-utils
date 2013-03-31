@@ -8,7 +8,7 @@
 
 /** @brief Model of an HTTP request. */
 typedef struct {
-	char * method; /*!< HTTP method used for request. */
+	char * method = "get"; /*!< HTTP method used for request. */
 	char * url; /*!< URL being requested. */
 	float http_versioni = 1.1; /*!< HTTP version string (i.e. 1.1 for HTTP/1.1). */
 
