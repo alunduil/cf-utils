@@ -8,46 +8,32 @@
 
 #include <curl/curl.h>
 
-typedef struct {
-	char * method;
-	char * uri;
-	float http_version;
-	
-	char * headers[];
-	
-	char * body;
-} http_request;
+#include "bindings/helpers.h"
 
-typedef struct {
-	float http_version;
-	int status_code;
-	char * reason_phrase;
-	
-	char * headers[];
-	
-	char * body;
-} http_response;
-
-/**
- * @brief Perform an HTTP request given the passed parameters.
- * 
- * @param[in] req HTTP Request
- * 
- * @returns HTTP Response
- */
 http_response request(const http_request & req) {
 	CURL *curl_handle;
-	
 	CURLcode result;
-	
+
+	int i = 0;
+
 	curl_global_init(CURL_GLOBAL_DEFAULT);
-	
-	curl = curl_easy_init();
-	
-	if (curl) {
-		curl_easy_setopt(curl, CURLOPT_URL, req.uri);
-		curl_easy_setopt(curl, CURLOPT_WRITEHEADER, req.headers);
-		
-		
+	curl_handle = curl_easy_init();
+
+	if (curl_handle) {
+#ifndef NDEBUG
+		curl_easy_setopt(curl_handle, CURLOPT_VERBOSE, 1);
+#endif
+
+#if 0
+		curl_easy_setopt(curl_handle, CURLOPT_WRITEFUNCTION, NULL); /*!< size_t function( char *ptr, size_t size, size_t nmemb, void *userdata) */
+		curl_easy_setopt(curl_handle, CURLOPT_WRITEDATA, NULL); /*!< FILE * */
+#endif
+
+#if 0
+		curl_easy_setopt(curl_handle, CURLOPT_READFUNCTION, NULL); /*!< size_t function( void *ptr, size_t size, size_t nmemb, void *userdata) */
+		curl_easy_setopt(curl_handle, CURLOPT_READDATA, NULL); /*!< FILE * */
+#endif
+
+		curl_easy_setopt(curl_handle, CURLOPT_URL, req.url);
 	}
 }
