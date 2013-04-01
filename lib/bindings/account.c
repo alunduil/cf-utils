@@ -14,7 +14,7 @@
 #include "bindings/account.h"
 
 const unsigned long long int get_account_property(const PROPERTY_MAP property, const unsigned char use_cache) {
-	http_request req;
+	http_request req = DEFAULT_HTTP_REQUEST;
 	const http_response * resp;
 
 	int cache[3] = { -1, -1, -1 };
@@ -35,8 +35,8 @@ const unsigned long long int get_account_property(const PROPERTY_MAP property, c
 		switch (resp->status_code) {
 			case 204:
 				cache[CONTAINER_COUNT] = (unsigned long long int)strtoll(get_header_from_response((const http_response *)&resp, "X-Account-Container-Count"), NULL, 10);
-				cache[OBJECT_COUNT] = get_header(resp, "X-Account-Object-Count");
-				cache[BYTE_COUNT] = get_header(resp, "X-Account-Bytes-Count");
+				cache[OBJECT_COUNT] = (unsigned long long int)strtoll(get_header_from_response((const http_response *)&resp, "X-Account-Object-Count"), NULL, 10);
+				cache[BYTE_COUNT] = (unsigned long long int)strtoll(get_header_from_response((const http_response *)&resp, "X-Account-Bytes-Count"), NULL, 10);
 
 				break;
 		}

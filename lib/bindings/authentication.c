@@ -13,10 +13,10 @@
 #include "bindings/authentication.h"
 
 short int authenticate(char *user_name, char *api_key) {
-	http_request req;
+	http_request req = DEFAULT_HTTP_REQUEST;
 	const http_response * resp;
 
-	int url_index = 0;
+	unsigned char url_index = 0;
 
 	char * urls[2] = {
 		"https://identity.api.rackspacecloud.com/v1.0",
@@ -46,5 +46,5 @@ short int authenticate(char *user_name, char *api_key) {
 		}
 	}
 
-	return (long)NULL;
+	return (short int)(long int)NULL;
 }

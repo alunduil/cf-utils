@@ -35,4 +35,4 @@
  * backups
  *
  */
-int get_container_names(char names[][], int & length);
+short int get_container_names(char ** names, unsigned int * length);

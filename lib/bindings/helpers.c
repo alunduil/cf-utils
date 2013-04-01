@@ -10,7 +10,7 @@
 
 #include "bindings/helpers.h"
 
-int check_request(const http_request * req) {
+short int check_request(const http_request * req) {
 	if (req->headers_length > 90) return (long)NULL;
 
 	/**

@@ -10,7 +10,7 @@
 #include "bindings/helpers.h"
 
 int get_container_names(char ** names, int * length) {
-	http_request req;
+	http_request req = DEFAULT_HTTP_REQUEST;
 	const http_response * resp;
 
 	add_header(&req, "X-Auth-Token", auth_data.token);

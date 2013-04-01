@@ -19,8 +19,13 @@ typedef struct {
 
 	char * body; /*!< Optional Body of the request. */
 
-	int headers_length; /*!< Number of Headers being passed in this request. */
-	char * headers[]; /*!< Array of Headers as Strings of the form: HEADER:VALUE. */
+	/**
+	 * @brief Number of headers passed in this request.
+	 * @note The upstream API limits us to 90 headers thus we only need space
+	 * for one byte of integer.
+	 */
+	unsigned char headers_length;
+	char ** headers; /*!< Array of Headers as Strings of the form: HEADER:VALUE. */
 } http_request;
 
 const http_request DEFAULT_HTTP_REQUEST = {
@@ -36,13 +41,13 @@ const http_request DEFAULT_HTTP_REQUEST = {
  */
 typedef struct {
 	float http_version; /*!< @see http_request::http_version */
-	int status_code; /*!< HTTP Status Code returned. */
+	unsigned short int status_code; /*!< HTTP Status Code returned. */
 	char * reason_phrase; /*!< HTTP Reason Phrase returned. */
 
 	char * body; /*!< @see http_request::body */
 
-	int headers_length; /*!< @see http_request::headers_length */
-	char * headers[]; /*!< @see http_request::headers */
+	unsigned char headers_length; /*!< @see http_request::headers_length */
+	char ** headers; /*!< @see http_request::headers */
 } http_response;
 
 const http_response DEFAULT_HTTP_RESPONSE = {
@@ -60,7 +65,7 @@ const http_response DEFAULT_HTTP_RESPONSE = {
  *
  * @returns 1 if valid; otherwise NULL.
  */
-int check_request(const http_request * req);
+short int check_request(const http_request * req);
 
 /**
  * @brief Add a header to an HTTP request.
