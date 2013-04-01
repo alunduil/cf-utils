@@ -59,4 +59,4 @@ struct {
  * The X-Storage-Url is the endpoint used for all other API calls after
  * successful authentication.
  */
-int authenticate(char *user_name, char *api_key);
+short int authenticate(char *user_name, char *api_key);

@@ -12,7 +12,7 @@
 
 #include "bindings/authentication.h"
 
-int authenticate(char *user_name, char *api_key) {
+short int authenticate(char *user_name, char *api_key) {
 	http_request req;
 	const http_response * resp;
 

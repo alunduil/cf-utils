@@ -50,7 +50,7 @@ typedef enum {
  * X-Account-Container-Count: 5
  *
  */
-unsigned long long int get_account_property(PROPERTY_MAP property, int use_cache);
+const unsigned long long int get_account_property(const PROPERTY_MAP property, const unsigned char use_cache);
 
 /**
  * @brief Get account's container count.
@@ -59,7 +59,7 @@ unsigned long long int get_account_property(PROPERTY_MAP property, int use_cache
  *
  * @returns The container count (int).
  */
-int get_account_container_count(int use_cache);
+const unsigned long long int get_account_container_count(const unsigned char use_cache);
 
 /**
  * @brief Get account's object count.
@@ -68,7 +68,7 @@ int get_account_container_count(int use_cache);
  *
  * @returns The object count (int).
  */
-int get_account_object_count(int use_cache);
+const unsigned long long int get_account_object_count(const unsigned char use_cache);
 
 /**
  * @brief Get account's byte count.
@@ -77,4 +77,4 @@ int get_account_object_count(int use_cache);
  *
  * @returns The byte count (int).
  */
-int get_account_byte_count(int use_cache);
+const unsigned long long int get_account_byte_count(const unsigned char use_cache);

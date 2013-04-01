@@ -13,7 +13,7 @@
 
 #include "bindings/account.h"
 
-unsigned long long int get_account_property(PROPERTY_MAP property, int use_cache) {
+const unsigned long long int get_account_property(const PROPERTY_MAP property, const unsigned char use_cache) {
 	http_request req;
 	const http_response * resp;
 
@@ -45,14 +45,14 @@ unsigned long long int get_account_property(PROPERTY_MAP property, int use_cache
 	return cache[property];
 }
 
-int get_account_container_count(int use_cache) {
+const unsigned long long int get_account_container_count(const unsigned char use_cache) {
 	return get_account_property(CONTAINER_COUNT, use_cache);
 }
 
-int get_account_object_count(int use_cache) {
+const unsigned long long int get_account_object_count(const unsigned char use_cache) {
 	return get_account_property(OBJECT_COUNT, use_cache);
 }
 
-int get_account_byte_count(int use_cache) {
+const unsigned long long int get_account_byte_count(const unsigned char use_cache) {
 	return get_account_property(BYTE_COUNT, use_cache);
 }
