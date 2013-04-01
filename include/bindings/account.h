@@ -16,7 +16,7 @@
  */
 
 /** @brief Map of properties that can be requested in an account. */
-enum {
+typedef enum {
 	CONTAINER_COUNT = 0, /*!< Count of containers in an account. */
 	OBJECT_COUNT, /*!< Count of objects in an account. */
 	BYTE_COUNT /*!< Total bytes used in account. */
@@ -50,7 +50,7 @@ enum {
  * X-Account-Container-Count: 5
  *
  */
-int get_account_property(PROPERTY_MAP property, int use_cache = 0);
+unsigned long long int get_account_property(PROPERTY_MAP property, int use_cache);
 
 /**
  * @brief Get account's container count.
@@ -59,7 +59,7 @@ int get_account_property(PROPERTY_MAP property, int use_cache = 0);
  *
  * @returns The container count (int).
  */
-int get_account_container_count(int use_cache = 0);
+int get_account_container_count(int use_cache);
 
 /**
  * @brief Get account's object count.
@@ -68,7 +68,7 @@ int get_account_container_count(int use_cache = 0);
  *
  * @returns The object count (int).
  */
-int get_account_object_count(int use_cache = 0);
+int get_account_object_count(int use_cache);
 
 /**
  * @brief Get account's byte count.
@@ -77,4 +77,4 @@ int get_account_object_count(int use_cache = 0);
  *
  * @returns The byte count (int).
  */
-int get_account_byte_count(int use_cache = 0);
+int get_account_byte_count(int use_cache);

@@ -32,13 +32,16 @@ int authenticate(char *user_name, char *api_key) {
 
 		switch (resp->status_code) {
 			case 204:
-				auth_data.management_url = (char *)get_header((const http_request *)&resp, "X-Storage-Url");
-				auth_data.cdn_management_url = (char *)get_header((const http_request *)&resp, "X-CDN-Management-Url");
-				auth_data.token = (char *)get_header((const http_request *)&resp, "X-Auth-Token");
+				auth_data.management_url = (char *)get_header_from_response((const http_response *)&resp, "X-Storage-Url");
+				auth_data.cdn_management_url = (char *)get_header_from_response((const http_response *)&resp, "X-CDN-Management-Url");
+				auth_data.token = (char *)get_header_from_response((const http_response *)&resp, "X-Auth-Token");
 
 				return 1;
 			case 401:
+#ifdef EACCESS
+				/** @todo Make this work consistently. */
 				errno = EACCESS;
+#endif
 				continue;
 		}
 	}

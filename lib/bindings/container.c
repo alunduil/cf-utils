@@ -9,15 +9,15 @@
 #include "bindings/authentication.h"
 #include "bindings/helpers.h"
 
-int get_container_names(char names[][], int & length) {
+int get_container_names(char ** names, int * length) {
 	http_request req;
-	http_response * resp;
+	const http_response * resp;
 
-	add_header(req, "X-Auth-Token", auth_data.token);
+	add_header(&req, "X-Auth-Token", auth_data.token);
 
 	req.url = auth_data.management_url;
 
-	resp = request(req);
+	resp = request(&req);
 
 	switch (resp->status_code) {
 		case 204:

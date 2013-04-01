@@ -6,6 +6,8 @@
  * See COPYING or http://www.opensource.org/licenses/mit-license.php.
  */
 
+#include <stdlib.h>
+
 /**
  * @brief Global variable for authentication data.
  *

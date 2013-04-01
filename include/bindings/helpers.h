@@ -83,7 +83,19 @@ void add_header(http_request * req, const char * header_name, const char * heade
  *
  * @returns Header's Value (char *).
  */
-const char * get_header(const http_request * req, const char * header_name);
+const char * get_header_from_request(const http_request * req, const char * header_name);
+
+/**
+ * @brief Get a particular header's value from an HTTP response.
+ *
+ * @param[in] resp HTTP Response
+ * @param[in] header_name HTTP Header Name
+ *
+ * @see http_response
+ *
+ * @returns Header's Value (char *)
+ */
+const char * get_header_from_response(const http_response * resp, const char * header_name);
 
 /**
  * @brief Perform an HTTP request given the passed parameters.
