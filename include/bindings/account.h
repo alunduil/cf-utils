@@ -71,26 +71,29 @@ const unsigned long long int get_account_property(const PROPERTY_MAP property, c
 /**
  * @brief Get account's container count.
  *
- * @param[in] use_cache 1 → use cached values; 0 → use values from the API.
+ * @param[in] use_cache Use cached values if present and this parameter is TRUE;
+ *                      otherwise, query the API for fresh values.
  *
- * @returns The container count (int).
+ * @returns The account's container count.
  */
 const unsigned long long int get_account_container_count(const unsigned char use_cache);
 
 /**
  * @brief Get account's object count.
  *
- * @param[in] use_cache 1 → use cached values; 0 → use values from the API.
+ * @param[in] use_cache Use cached values if present and this parameter is TRUE;
+ *                      otherwise, query the API for fresh values.
  *
- * @returns The object count (int).
+ * @returns The account's object count.
  */
 const unsigned long long int get_account_object_count(const unsigned char use_cache);
 
 /**
  * @brief Get account's byte count.
  *
- * @param[in] use_cache 1 → use cached values; 0 → use values from the API.
+ * @param[in] use_cache Use cached values if present and this parameter is TRUE;
+ *                      otherwise, query the API for fresh values.
  *
- * @returns The byte count (int).
+ * @returns The account's byte count.
  */
 const unsigned long long int get_account_byte_count(const unsigned char use_cache);
