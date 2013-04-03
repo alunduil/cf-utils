@@ -7,14 +7,20 @@
  */
 
 /**
- * @brief List container names.
+ * @brief Get an array of container names.
  *
- * @param[in,out] names Names of containers.  Will be allocated by the call.
- * @param[in,out] length Length of the container list.  Non-zero sets a limit on the number of returned names.
+ * @param[in,out] names Array of container names as char[][] which is allocated
+ *                      by the call and freed by the caller.
+ * @param[in,out] length Length of the container names array.  When used as
+ *                       input, a non-zero value sets a limit on the number of
+ *                       names to be returned.
  *
- * @returns 1 → success; NULL → error (errno will be set).
+ * @todo Add marker and end_marker support into this function.
  *
- * @warning If length is zero, names will be a null pointer!
+ * @returns FALSE if an error occurs and sets errno; otherwise, equivalent to
+ *          length.
+ *
+ * @warning If length is zero on return, names will be a null pointer!
  *
  * Example HTTP Request:
  *
@@ -35,23 +41,32 @@
  * backups
  *
  */
-short int get_container_names(char ** names, unsigned long int * length);
+const unsigned long int get_container_names(char names[][], unsigned long int * length);
 
+/**
+ * @brief Details about a container.
+ */
 typedef struct {
-	char * name; /*!< Name of the container. */
+	char name[255]; /*!< Name of the container. */
 	unsigned long long int object_count; /*!< Number of objects in container. */
 	unsigned long long int byte_count; /*!< Number of bytes in container. */
 } container_details;
 
 /**
- * @brief List container names with object count and byte count.
+ * @brief Get an array of container_details.
  *
- * @param[in,out] details Container name, object count, and byte count.  Allocated by the call.
- * @param[out] length Length of the container_details list.
+ * @param[in,out] details Array of container_details which is allocated by the
+ *                        call and freed by the caller.
+ * @param[in,out] length Length of the container_details array.  When used as
+ *                       input, a non-zero value sets a limit on the number of
+ *                       names to be returned.
  *
- * @returns 1 → success; NULL → error (errno will be set).
+ * @todo Add marker and end_marker support into this function.
  *
- * @warning If length is zero, container_details will be a null pointer!
+ * @returns FALSE if an error occurs and sets errno; otherwise, equivalent to
+ *          length.
+ *
+ * @warning If length is zero on return, details will be a null pointer!
  *
  * Example HTTP Request (JSON):
  *
@@ -98,4 +113,4 @@ typedef struct {
  *   </container>
  * </account>
  */
-short int get_container_details(container_details * details, unsigned long int length);
+const unsigned long int get_container_details(container_details details[], unsigned long int * length);

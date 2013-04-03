@@ -11,6 +11,7 @@
  *
  * @todo Consider moving this to a static variable in a function call?
  * @todo static variable avoid the need of atexit with a cleanup for this …
+ * @todo Make this data structure thread safe across accounts …
  */
 struct {
 	char * management_url; /*!< Endpoint URL for cloud files. */
