@@ -7,6 +7,15 @@
  */
 
 /**
+ * @brief Map of properties that can be requested in an account.
+ */
+typedef enum {
+	CONTAINER_COUNT = 0, /*!< Count of containers in an account. */
+	OBJECT_COUNT, /*!< Count of objects in an account. */
+	BYTE_COUNT /*!< Total bytes used in account. */
+} PROPERTY_MAP;
+
+/**
  * Query Parameters:
  *  :limit: Number of results to return.
  *  :marker: Return container names greater than passed UTF-8 string.
@@ -15,22 +24,27 @@
  *  :prefix: not used in account!
  */
 
-/** @brief Map of properties that can be requested in an account. */
-typedef enum {
-	CONTAINER_COUNT = 0, /*!< Count of containers in an account. */
-	OBJECT_COUNT, /*!< Count of objects in an account. */
-	BYTE_COUNT /*!< Total bytes used in account. */
-} PROPERTY_MAP;
-
 /**
  * @brief Get requested account property.
  *
  * @param[in] property Specifies which property's value to return.
- * @param[in] use_cache 1 → use cached values; 0 → use values from the API.
+ * @param[in] use_cache Use cached values if present and this parameter is TRUE;
+ *                      otherwise, query the API for fresh values.
  *
- * @returns Requested property (int).
+ * @returns Requested account property.
  *
- * @note Not intended for direct use.
+ * @note Not intended for direct use.  Please, use on of the referenced
+ *       functions instead.
+ *
+ * @see get_account_byte_count
+ * @see get_account_container_count
+ * @see get_account_object_count
+ *
+ * This is intended as a helper function to cache values for the properties of
+ * an account (byte count, container count, and object count).  This function
+ * returns a particular int and behaves quite similarly to an union.  The reason
+ * a union is not used instead is the state we can provide with the function
+ * through the static cache variable.
  *
  * Example HTTP Request:
  *
@@ -48,6 +62,8 @@ typedef enum {
  * X-Account-Bytes-Used: 10373619
  * Content-Length: 0
  * X-Account-Container-Count: 5
+ *
+ * @todo Check return type for appropriate sizing for responses.
  *
  */
 const unsigned long long int get_account_property(const PROPERTY_MAP property, const unsigned char use_cache);
