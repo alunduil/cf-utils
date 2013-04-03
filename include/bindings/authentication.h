@@ -6,12 +6,11 @@
  * See COPYING or http://www.opensource.org/licenses/mit-license.php.
  */
 
-#include <stdlib.h>
-
 /**
  * @brief Global variable for authentication data.
  *
  * @todo Consider moving this to a static variable in a function call?
+ * @todo static variable avoid the need of atexit with a cleanup for this …
  */
 struct {
 	char * management_url; /*!< Endpoint URL for cloud files. */
@@ -31,7 +30,7 @@ struct {
  * @param[in] user_name Cloud Account user name used to authenticate.
  * @param[in] api_key Cloud Account API Key used to authenticate.
  *
- * @returns 1 for success and NULL on error (also sets errno).
+ * @returns FALSE on error and sets errno; otherwise, TRUE.
  *
  * Tries to request a login token from the authentication endpoint by first
  * trying the global endpoint URL, https://identity.api.rackspacecloud.com/v1.0.
@@ -59,4 +58,4 @@ struct {
  * The X-Storage-Url is the endpoint used for all other API calls after
  * successful authentication.
  */
-short int authenticate(char *user_name, char *api_key);
+const unsigned char authenticate(const char user_name[], const char api_key[]);
