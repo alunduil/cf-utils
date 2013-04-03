@@ -21,11 +21,11 @@ typedef struct {
 
 	/**
 	 * @brief Number of headers passed in this request.
-	 * @note The upstream API limits us to 90 headers thus we only need space
-	 * for one byte of integer.
+	 * @note The upstream API limits us to 90 headers thus we only need one byte
+	 *       to hold our number of headers.
 	 */
 	unsigned char headers_length;
-	char ** headers; /*!< Array of Headers as Strings of the form: HEADER:VALUE. */
+	char * headers[]; /*!< Array of Headers as Strings of the form: HEADER:VALUE. */
 } http_request;
 
 const http_request DEFAULT_HTTP_REQUEST = {
@@ -47,7 +47,7 @@ typedef struct {
 	char * body; /*!< @see http_request::body */
 
 	unsigned char headers_length; /*!< @see http_request::headers_length */
-	char ** headers; /*!< @see http_request::headers */
+	char * headers[]; /*!< @see http_request::headers */
 } http_response;
 
 const http_response DEFAULT_HTTP_RESPONSE = {
@@ -57,36 +57,40 @@ const http_response DEFAULT_HTTP_RESPONSE = {
 };
 
 /**
- * @brief Check request meets cloud files request limits.
- *
- * @param[in] req HTTP Request
- *
- * @see http_request
- *
- * @returns 1 if valid; otherwise NULL.
- */
-short int check_request(const http_request * req);
-
-/**
  * @brief Add a header to an HTTP request.
  *
  * @param[in,out] req HTTP Request
  * @param[in] header_name HTTP Header Name
  * @param[in] header_value HTTP Header Value
  *
+ * @returns FALSE if an error and sets errno; otherwise, TRUE
+ *
  * @see http_request
  */
-void add_header(http_request * req, const char * header_name, const char * header_value);
+unsigned char add_header_to_request(http_request * req, const char * header_name, const char * header_value);
 
 /**
- * @brief Get a particular header's value from an HTTP request.
+ * @brief Add a header to an HTTP response.
+ *
+ * @param[in,out] req HTTP Response
+ * @param[in] header_name HTTP Header Name
+ * @param[in] header_value HTTP Header Value
+ *
+ * @returns FALSE if an error and sets errno; otherwise, TRUE
+ *
+ * @see http_response
+ */
+unsigned char add_header_to_response(http_response * resp, const char * header_name, const char * header_value);
+
+/**
+ * @brief Get a requested header's value from an HTTP request.
  *
  * @param[in] req HTTP Request
  * @param[in] header_name HTTP Header Name
  *
  * @see http_request
  *
- * @returns Header's Value (char *).
+ * @returns Header's Value.
  */
 const char * get_header_from_request(const http_request * req, const char * header_name);
 
@@ -98,7 +102,7 @@ const char * get_header_from_request(const http_request * req, const char * head
  *
  * @see http_response
  *
- * @returns Header's Value (char *)
+ * @returns Header's Value.
  */
 const char * get_header_from_response(const http_response * resp, const char * header_name);
 
