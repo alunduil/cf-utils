@@ -10,7 +10,7 @@
  * @brief List container names.
  *
  * @param[in,out] names Names of containers.  Will be allocated by the call.
- * @param[out] length Length of the container list.
+ * @param[in,out] length Length of the container list.  Non-zero sets a limit on the number of returned names.
  *
  * @returns 1 → success; NULL → error (errno will be set).
  *

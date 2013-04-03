@@ -1,4 +1,4 @@
-add_library(cf-bindings STATIC helpers.c authentication.c account.c container.c)
+add_library(cf-bindings helpers.c authentication.c account.c container.c)
 
 # URL encode names first! UTF-8!
 # Containers: 500000 per account; No slash in name; 256 bytes after URL encoded name; CDN
