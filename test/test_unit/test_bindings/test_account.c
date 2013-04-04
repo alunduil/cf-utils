@@ -8,13 +8,25 @@
 
 #include <check.h>
 #include <stdlib.h>
+#include <errno.h>
 
 #include "bindings/account.h"
 
-START_TEST (test_account_create)
+START_TEST (test_account_create_success)
 {
-	fail_if(account_create() == NULL, "Account struct not initialized!");
+	errno = 0;
 
+	Account * a = account_create();
+
+	if (errno != 0)
+		fail("Error status changed during account_create call!");
+
+	fail_if(a == NULL, "Account struct not initialized!");
+}
+END_TEST
+
+START_TEST (test_account_create_failure)
+{
 #if 0
 	/**
 	 * @todo Add tests like the following as conditions are reported as not
@@ -30,7 +42,7 @@ END_TEST
 
 START_TEST (test_account_free)
 {
-	account * a = account_create(); /*!< @todo Mock account create or hand code? */
+	Account * a = account_create(); /*!< @todo Mock account create or hand code? */
 
 	account_free(a);
 
@@ -60,8 +72,12 @@ Suite * account_suite_create(void) {
 	Suite * s = suite_create("account");
 	TCase * tc;
 
-	tc = tcase_create("account_create");
-	tcase_add_test(tc, test_account_create);
+	tc = tcase_create("account_create_success");
+	tcase_add_test(tc, test_account_create_success);
+	suite_add_tcase(s, tc);
+
+	tc = tcase_create("account_create_failure");
+	tcase_add_test(tc, test_account_create_failure);
 	suite_add_tcase(s, tc);
 
 	tc = tcase_create("account_free");
