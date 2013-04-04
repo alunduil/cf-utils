@@ -12,6 +12,8 @@
 #include "bindings/authentication.h"
 #include "bindings/helpers.h"
 
+#include "bindings/container.h"
+
 /**
  * @todo URL Encode Names
  * @todo UTF-8 Encode Names
@@ -25,27 +27,18 @@ const unsigned long int get_container_names(char * names[], unsigned long int * 
 	http_request req = DEFAULT_HTTP_REQUEST;
 	const http_response * resp;
 
-	unsigned char question_mark = FALSE;
-	char limit[16];
-
 	char name[256] = "";
 	unsigned short int body_index = 0;
 	unsigned int body_length = 0;
 
+	char tmp[10];
+
 	add_header_to_request(&req, "X-Auth-Token", auth_data.token);
 
-	req.url = auth_data.management_url;
+	sprintf(tmp, "%lu", *length);
+	add_query_parameter_to_request(&req, "limit", tmp);
 
-	if (*length > 0) {
-		if (question_mark)
-			sprintf(limit, "&limit=%lu", *length);
-		else {
-			sprintf(limit, "?limit=%lu", *length);
-			question_mark = TRUE;
-		}
-		req.url = realloc(req.url, strlen(req.url) + strlen(limit));
-		strcat(req.url, limit);
-	}
+	req.url = auth_data.management_url;
 
 	resp = request(&req);
 
@@ -69,5 +62,14 @@ const unsigned long int get_container_names(char * names[], unsigned long int * 
 			break;
 	}
 
+	free_response((void *)resp);
+
 	return TRUE;
+}
+
+const unsigned long int get_container_details(container_details details[], unsigned long int * length) {
+	http_request req = DEFAULT_HTTP_REQUEST;
+	const http_response * resp;
+
+
 }

@@ -88,6 +88,18 @@ const http_response DEFAULT_HTTP_RESPONSE = {
 const unsigned char free_response(http_response * resp);
 
 /**
+ * @brief Add query parameter to HTTP request.
+ * @param[in,out] req HTTP Request
+ * @param[in] query_key Query Parameter Name
+ * @param[in] query_value Query Parameter Value
+ *
+ * @returns FALSE if an error and sets errno; otherwise, TRUE
+ *
+ * @see http_request
+ */
+unsigned char add_query_parameter_to_request(http_request * req, const char * query_key, const char * query_value);
+
+/**
  * @brief Add a header to an HTTP request.
  *
  * @param[in,out] req HTTP Request
