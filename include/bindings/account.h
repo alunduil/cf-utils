@@ -6,6 +6,9 @@
  * See COPYING or http://www.opensource.org/licenses/mit-license.php.
  */
 
+#ifndef CF_UTILS_BINDINGS_ACCOUNT
+#define CF_UTILS_BINDINGS_ACCOUNT
+
 /**
  * @brief Map of properties that can be requested in an account.
  */
@@ -97,3 +100,5 @@ const unsigned long long int get_account_object_count(const unsigned char use_ca
  * @returns The account's byte count.
  */
 const unsigned long long int get_account_byte_count(const unsigned char use_cache);
+
+#endif

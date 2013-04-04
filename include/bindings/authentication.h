@@ -6,6 +6,11 @@
  * See COPYING or http://www.opensource.org/licenses/mit-license.php.
  */
 
+#ifndef CF_UTILS_BINDINGS_AUTHENTICATION
+#define CF_UTILS_BINDINGS_AUTHENTICATION
+
+#include <stdlib.h>
+
 /**
  * @brief Global variable for authentication data.
  *
@@ -59,4 +64,6 @@ struct {
  * The X-Storage-Url is the endpoint used for all other API calls after
  * successful authentication.
  */
-const unsigned char authenticate(const char user_name[], const char api_key[]);
+const unsigned char authenticate(const char * user_name, const char * api_key);
+
+#endif

@@ -6,7 +6,18 @@
  * See COPYING or http://www.opensource.org/licenses/mit-license.php.
  */
 
+#ifndef CF_UTILS_BINDINGS_HELPERS
+#define CF_UTILS_BINDINGS_HELPERS
+
 #include <stdlib.h>
+
+#ifndef FALSE
+#define FALSE (0)
+#endif
+
+#ifndef TRUE
+#define TRUE (!FALSE)
+#endif
 
 /**
  * @brief Model of an HTTP request.
@@ -36,6 +47,16 @@ const http_request DEFAULT_HTTP_REQUEST = {
 };
 
 /**
+ * @brief Properly free memory held by an http_request pointer.
+ * @param[in] req The http_request to free.
+ *
+ * @see http_request
+ *
+ * @returns FALSE if error occurs and sets errno; otherwise, TRUE.
+ */
+const unsigned char free_request(http_request * req);
+
+/**
  * @brief Model of an HTTP response.
  * @note Default values are provided by DEFAULT_HTTP_RESPONSE.
  */
@@ -55,6 +76,16 @@ const http_response DEFAULT_HTTP_RESPONSE = {
 	.headers_length = 0,
 	.body = NULL
 };
+
+/**
+ * @brief Properly free memory held by an http_response pointer.
+ * @param[in] resp The http_response to free.
+ *
+ * @see http_response
+ *
+ * @returns FALSE if error occurse and sets errno; otherwise, TRUE.
+ */
+const unsigned char free_response(http_response * resp);
 
 /**
  * @brief Add a header to an HTTP request.
@@ -116,3 +147,5 @@ const char * get_header_from_response(const http_response * resp, const char * h
  * @see http_response
  */
 const http_response * request(const http_request * req);
+
+#endif

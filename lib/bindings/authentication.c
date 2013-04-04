@@ -7,12 +7,14 @@
  */
 
 #include <errno.h>
+#include <string.h>
+#include <stdlib.h>
 
 #include "bindings/helpers.h"
 
 #include "bindings/authentication.h"
 
-short int authenticate(char *user_name, char *api_key) {
+const unsigned char authenticate(const char * user_name, const char *api_key) {
 	http_request req = DEFAULT_HTTP_REQUEST;
 	const http_response * resp;
 
@@ -23,8 +25,8 @@ short int authenticate(char *user_name, char *api_key) {
 		"https://lon.identity.api.rackspacecloud.com/v1.0"
 	};
 
-	add_header(&req, "X-Auth-User", user_name);
-	add_header(&req, "X-Auth-Key", api_key);
+	add_header_to_request(&req, "X-Auth-User", user_name);
+	add_header_to_request(&req, "X-Auth-Key", api_key);
 
 	while (url_index++ < 2) {
 		req.url = urls[url_index];
@@ -32,19 +34,21 @@ short int authenticate(char *user_name, char *api_key) {
 
 		switch (resp->status_code) {
 			case 204:
+				/** @todo Thread safety for the following assignment. */
 				auth_data.management_url = (char *)get_header_from_response((const http_response *)&resp, "X-Storage-Url");
 				auth_data.cdn_management_url = (char *)get_header_from_response((const http_response *)&resp, "X-CDN-Management-Url");
 				auth_data.token = (char *)get_header_from_response((const http_response *)&resp, "X-Auth-Token");
 
-				return 1;
+				return TRUE;
 			case 401:
-#ifdef EACCESS
-				/** @todo Make this work consistently. */
+
+#ifdef EACCESS /*!< @todo Make this work consistently. */
 				errno = EACCESS;
 #endif
-				continue;
+			
+				break;
 		}
 	}
 
-	return (short int)(long int)NULL;
+	return FALSE;
 }

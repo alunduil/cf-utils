@@ -7,6 +7,7 @@
  */
 
 #include <errno.h>
+#include <limits.h>
 
 #include "bindings/authentication.h"
 #include "bindings/helpers.h"
@@ -17,17 +18,27 @@ const unsigned long long int get_account_property(const PROPERTY_MAP property, c
 	http_request req = DEFAULT_HTTP_REQUEST;
 	const http_response * resp;
 
-	int cache[3] = { -1, -1, -1 };
+	/**
+	 * @brief property cache.
+	 *
+	 * The size of an unsigned long long int should be so ridiculous that it's
+	 * never hit … we'll see how long that lasts.
+	 */
+	static unsigned long long int cache[3] = {
+		ULLONG_MAX,
+		ULLONG_MAX,
+		ULLONG_MAX
+	};
 
 	if (
 		!use_cache ||
-		cache[CONTAINER_COUNT] < 0 ||
-		cache[OBJECT_COUNT] < 0 ||
-		cache[BYTE_COUNT] < 0
+		cache[CONTAINER_COUNT] == ULLONG_MAX ||
+		cache[OBJECT_COUNT] == ULLONG_MAX ||
+		cache[BYTE_COUNT] == ULLONG_MAX
 	) {
-		add_header(&req, "X-Auth-Token", auth_data.token);
+		add_header_to_request(&req, "X-Auth-Token", auth_data.token); /*!< @todo Wrap token in thread-save function. */
 
-		req.url = auth_data.management_url;
+		req.url = auth_data.management_url; /*!< @todo Wrap URL in thread-safe function. */
 		req.method = "head";
 
 		resp = request(&req);
@@ -41,6 +52,8 @@ const unsigned long long int get_account_property(const PROPERTY_MAP property, c
 				break;
 		}
 	}
+
+	free_response((void *)resp);
 
 	return cache[property];
 }

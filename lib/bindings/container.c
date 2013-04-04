@@ -12,22 +12,38 @@
 #include "bindings/authentication.h"
 #include "bindings/helpers.h"
 
-int get_container_names(char ** names, unsigned int * length) {
+/**
+ * @todo URL Encode Names
+ * @todo UTF-8 Encode Names
+ * @todo 256 Bytes in Name after URL encoding
+ * @todo CDN URI
+ * @todo Expires
+ * @todo Cache-Control
+ */
+
+const unsigned long int get_container_names(char * names[], unsigned long int * length) {
 	http_request req = DEFAULT_HTTP_REQUEST;
 	const http_response * resp;
 
-	char name[256];
-
-	char question_mark = 0;
+	unsigned char question_mark = FALSE;
 	char limit[16];
 
-	add_header(&req, "X-Auth-Token", auth_data.token);
+	char name[256] = "";
+	unsigned short int body_index = 0;
+	unsigned int body_length = 0;
+
+	add_header_to_request(&req, "X-Auth-Token", auth_data.token);
 
 	req.url = auth_data.management_url;
 
 	if (*length > 0) {
-		if (question_mark) 
-		sprintf(limit, "?limit=%u", *length);
+		if (question_mark)
+			sprintf(limit, "&limit=%lu", *length);
+		else {
+			sprintf(limit, "?limit=%lu", *length);
+			question_mark = TRUE;
+		}
+		req.url = realloc(req.url, strlen(req.url) + strlen(limit));
 		strcat(req.url, limit);
 	}
 
@@ -40,12 +56,18 @@ int get_container_names(char ** names, unsigned int * length) {
 
 			break;
 		case 200:
-			while (resp->body
-
-			/** Containers present! */
+			body_length = strlen(resp->body);
+			for (body_index = 0; body_index < body_length; ++body_index) {
+				if (resp->body[body_index] == '\n') {
+					names = realloc(names, (++(*length)) * sizeof(name));
+					names[*length] = strncpy(names[*length], name, 256);
+					name[0] = 0;
+				} else
+					strncat(name, (const char *)resp->body[body_index], 1); /*!< @todo Use strtok instead. */
+			}
 
 			break;
 	}
 
-	return 1;
+	return TRUE;
 }

@@ -6,6 +6,9 @@
  * See COPYING or http://www.opensource.org/licenses/mit-license.php.
  */
 
+#ifndef CF_UTILS_BINDINGS_CONTAINER
+#define CF_UTILS_BINDINGS_CONTAINER
+
 /**
  * @brief Get an array of container names.
  *
@@ -41,13 +44,13 @@
  * backups
  *
  */
-const unsigned long int get_container_names(char names[][], unsigned long int * length);
+const unsigned long int get_container_names(char * names[], unsigned long int * length);
 
 /**
  * @brief Details about a container.
  */
 typedef struct {
-	char name[255]; /*!< Name of the container. */
+	char name[256]; /*!< Name of the container. */
 	unsigned long long int object_count; /*!< Number of objects in container. */
 	unsigned long long int byte_count; /*!< Number of bytes in container. */
 } container_details;
@@ -114,3 +117,5 @@ typedef struct {
  * </account>
  */
 const unsigned long int get_container_details(container_details details[], unsigned long int * length);
+
+#endif
