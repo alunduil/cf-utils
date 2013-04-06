@@ -52,14 +52,16 @@ END_TEST
 
 START_TEST (test_get_account_property)
 {
-	account * a = account_create();
+	Account * a = account_create();
 
 	/**
 	 * @todo Mock things …
 	 */
-	fail_unless(get_account_property(a, CONTAINER_COUNT, FALSE) == 3, "Incorrect container account returned!");
 
-	fail_unless(get_account_property(a, CONTAINER_COUNT, TRUE) == 3, "Incorrect container account returned!");
+	fail_unless(_get_account_property(a, CONTAINER_COUNT, FALSE) == 3, "Incorrect container account returned!");
+
+	fail_unless(_get_account_property(a, CONTAINER_COUNT, TRUE) == 3, "Incorrect container account returned!");
+
 	/**
 	 * @todo Check accesses to request function.
 	 */

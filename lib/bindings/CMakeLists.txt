@@ -1,4 +1,4 @@
-add_library(cfbindings helpers.c authentication.c account.c container.c)
+add_library(cf-bindings helpers.c authentication.c account.c container.c)
 
 # Object ToDo:
 # * URL Encode Names

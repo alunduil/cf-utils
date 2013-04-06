@@ -10,6 +10,12 @@
 #define CF_UTILS_BINDINGS_ACCOUNT
 
 /**
+ * @brief An account structure that is populated with management information.
+ */
+typedef struct {
+} Account;
+
+/**
  * @brief Map of properties that can be requested in an account.
  */
 typedef enum {
