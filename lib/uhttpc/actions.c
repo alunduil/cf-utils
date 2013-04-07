@@ -6,11 +6,4 @@
  * See COPYING or http://www.opensource.org/licenses/mit-license.php.
  */
 
-#include <errno.h>
-#include <string.h>
-#include <stdlib.h>
-
-#include "bindings/helpers.h"
-
-#include "bindings/authentication.h"
-
+#include "actions.h"
