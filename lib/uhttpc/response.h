@@ -20,7 +20,7 @@ typedef struct {
 
     char * headers[90]; /*!< Array of Headers in the form: HEADER:VALUE. */
 
-    char body[]; /*!< Optional Body */
+    char * body; /*!< Optional Body */
 } http_response;
 
 /**
