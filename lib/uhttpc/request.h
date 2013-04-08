@@ -28,7 +28,7 @@ typedef struct {
  *
  * @returns An initialized http_request pointer.
  */
-http_request * http_reqeust_create();
+http_request * http_request_create();
 
 /**
  * @brief Properly free an http_request.

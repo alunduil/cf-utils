@@ -6,21 +6,21 @@
  * See COPYING or http://www.opensource.org/licenses/mit-license.php.
  */
 
-#ifndef CF_UTILS_BINDINGS_ACCOUNT
-#define CF_UTILS_BINDINGS_ACCOUNT
+#ifndef CF_BINDINGS_ACCOUNT
+#define CF_BINDINGS_ACCOUNT
 
 /**
  * @brief An account structure that is populated with management information.
  */
 typedef struct {
-	char * user_name; /*!< Account Username (Name) */
-	char * name; /*!< Alias to username. */
-
+	char * name; /*!< Account Username (Name) */
 	char * api_key; /*!< API key (@todo remove this from memory?). */
 
 	char * management_url; /*!< URL for Cloud Files Management. */
 	char * cdn_management_url; /*!< URL for CDN Management. */
 	char * token; /*!< Token. */
+
+	unsigned long long int properties[3]; /*!< Property Cache */
 } Account;
 
 /**
@@ -46,35 +46,15 @@ const unsigned char account_free(Account * account);
  * @param[in] user_name Cloud Account user name used to authenticate.
  * @param[in] api_key Cloud Account API Key used to authenticate.
  *
- * @returns FALSE on error and sets errno; otherwise, TRUE.
+ * @returns 0 on error and sets errno; otherwise, 1.
  *
  * Tries to request a login token from the authentication endpoint by first
  * trying the global endpoint URL, https://identity.api.rackspacecloud.com/v1.0.
  * If this URL doesn't let the user authenticate we try the London endpoint,
  * https://lon.identity.api.rackspacecloud.com/v1.0.  This code will be removed
  * when there is only one authentication endpoint.
- *
- * Example Request HTTP:
- *
- * GET /v1.0 HTTP/1.1
- * Host: identity.api.rackspacecloud.com
- * X-Auth-User: jdoe
- * X-Auth-Key: a86850deb2742ec3cb41518e26aa2d89
- *
- * Example Response HTTP:
- *
- * HTTP/1.1 204 No Content
- * Date: Mon, 12 Nov 2007 15:32:21 GMT
- * X-Storage-Url: https://storage.clouddrive.com/v1/CF_xer7_34
- * X-CDN-Management-Url: https://cdn.clouddrive.com/v1/CF_xer7_34
- * X-Auth-Token: eaaafd18-0fed-4b3a-81b4-663c99ec1cbb
- * Content-Length: 0
- * Content-Type: text/plain; charset=UTF-8
- *
- * The X-Storage-Url is the endpoint used for all other API calls after
- * successful authentication.
  */
-const unsigned char authenticate(Account * account, char user_name[], char api_key[]);
+const unsigned char authenticate(Account * account, const char user_name[], const char api_key[]);
 
 /**
  * @brief Map of properties that can be requested in an account.
@@ -110,7 +90,7 @@ typedef enum {
  * @todo Check return type for appropriate sizing for responses.
  *
  */
-const unsigned long long int _get_account_property(const _PROPERTY_MAP property, const unsigned char use_cache);
+const unsigned long long int _get_account_property(Account * account, const _PROPERTY_MAP property, const unsigned char use_cache);
 
 /**
  * @brief Get account's container count.
@@ -120,7 +100,7 @@ const unsigned long long int _get_account_property(const _PROPERTY_MAP property,
  *
  * @returns The account's container count.
  */
-const unsigned long long int get_account_container_count(const unsigned char use_cache);
+const unsigned long long int get_account_container_count(Account * account, const unsigned char use_cache);
 
 /**
  * @brief Get account's object count.
@@ -130,7 +110,7 @@ const unsigned long long int get_account_container_count(const unsigned char use
  *
  * @returns The account's object count.
  */
-const unsigned long long int get_account_object_count(const unsigned char use_cache);
+const unsigned long long int get_account_object_count(Account * account, const unsigned char use_cache);
 
 /**
  * @brief Get account's byte count.
@@ -140,6 +120,6 @@ const unsigned long long int get_account_object_count(const unsigned char use_ca
  *
  * @returns The account's byte count.
  */
-const unsigned long long int get_account_byte_count(const unsigned char use_cache);
+const unsigned long long int get_account_byte_count(Account * account, const unsigned char use_cache);
 
 #endif

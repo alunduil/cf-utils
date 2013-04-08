@@ -1,5 +1,7 @@
-add_library(account account.h account.c)
-add_library(container container.h container.c)
+add_library(cf-bindings SHARED
+  account.h account.c
+  container.h container.c
+  )
 
 # Object ToDo:
 # * URL Encode Names

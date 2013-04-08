@@ -6,8 +6,8 @@
  * See COPYING or http://www.opensource.org/licenses/mit-license.php.
  */
 
-#ifndef CF_UTILS_BINDINGS_CONTAINER
-#define CF_UTILS_BINDINGS_CONTAINER
+#ifndef CF_BINDINGS_CONTAINER
+#define CF_BINDINGS_CONTAINER
 
 /**
  * @brief Get an array of container names.

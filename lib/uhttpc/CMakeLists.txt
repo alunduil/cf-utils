@@ -1,3 +1,5 @@
-add_library(request request.h request.c)
-add_library(response response.h request.c)
-add_library(action actions.h actions.c)
+add_library(uhttpc SHARED
+  request.h request.c
+  response.h request.c
+  actions.h actions.c
+  )
