@@ -19,6 +19,6 @@
  *
  * @returns http_response with server's response
  */
-http_response * request(const http_request * req);
+http_response * request ( const http_request * req );
 
 #endif

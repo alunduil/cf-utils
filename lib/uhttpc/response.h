@@ -50,7 +50,7 @@ const unsigned char http_response_free ( http_response * resp );
  *
  * @see http_response
  */
-const unsigned char add_header_to_response(http_response * resp, const char header_name[], const char header_value[]);
+const unsigned char add_header_to_response ( http_response * resp, const char header_name[], const char header_value[] );
 
 /**
  * @brief Get a particular header's value from an HTTP response.
@@ -62,6 +62,6 @@ const unsigned char add_header_to_response(http_response * resp, const char head
  *
  * @returns Header's Value.
  */
-const char * get_header_from_response(const http_response * resp, const char header_name[]);
+const char * get_header_from_response ( const http_response * resp, const char header_name[] );
 
 #endif

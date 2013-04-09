@@ -26,31 +26,31 @@
 #include "account.h"
 
 Account* account_create() {
-	Account * account = (Account *) malloc ( sizeof(Account) );
+    Account * account = ( Account * ) malloc ( sizeof ( Account ) );
 
-	account->name = NULL;
-	account->api_key = NULL;
+    account->name = NULL;
+    account->api_key = NULL;
 
-	account->management_url = NULL;
-	account->cdn_management_url = NULL;
-	account->token = NULL;
+    account->management_url = NULL;
+    account->cdn_management_url = NULL;
+    account->token = NULL;
 
-	account->properties[_CONTAINER_COUNT] = ULLONG_MAX;
-	account->properties[_OBJECT_COUNT] = ULLONG_MAX;
-	account->properties[_BYTE_COUNT] = ULLONG_MAX;
+    account->properties[_CONTAINER_COUNT] = ULLONG_MAX;
+    account->properties[_OBJECT_COUNT] = ULLONG_MAX;
+    account->properties[_BYTE_COUNT] = ULLONG_MAX;
 
-	return account;
+    return account;
 }
 
 const unsigned char account_free ( Account* account ) {
-	free( account->name );
-	free( account->api_key );
+    free ( account->name );
+    free ( account->api_key );
 
-	free( account->management_url );
-	free( account->cdn_management_url );
-	free( account->token );
+    free ( account->management_url );
+    free ( account->cdn_management_url );
+    free ( account->token );
 
-	return 1;
+    return 1;
 }
 
 /**
@@ -74,49 +74,52 @@ const unsigned char account_free ( Account* account ) {
  * The X-Storage-Url is the endpoint used for all other API calls after
  * successful authentication.
  */
-const unsigned char authenticate(Account * account, const char user_name[], const char api_key[]) {
-	http_request * req = http_request_create();
-	const http_response * resp;
+const unsigned char authenticate ( Account * account, const char user_name[], const char api_key[] ) {
+    http_request * req = http_request_create();
+    const http_response * resp;
 
-	unsigned char url_index = 0;
+    unsigned char url_index = 0;
 
-	char urls[2][] = {
-		"https://identity.api.rackspacecloud.com/v1.0",
-		"https://lon.identity.api.rackspacecloud.com/v1.0"
-	};
+    char * urls[2];
 
-	account->name = malloc(sizeof(char)*strlen(user_name) + 1);
-	strcpy(account->name, user_name);
+	urls[0] = malloc ( sizeof ( char ) * 44 + 1);
+	strncpy( urls[0], "https://identity.api.rackspacecloud.com/v1.0", 45);
 
-	account->api_key = malloc(sizeof(char)*strlen(api_key) + 1);
-	strcpy(account->api_key, api_key);
+	urls[1] = malloc ( sizeof ( char ) * 48 + 1);
+	strncpy( urls[1], "https://lon.identity.api.rackspacecloud.com/v1.0", 49);
 
-	add_header_to_request(req, "X-Auth-User", account->name);
-	add_header_to_request(req, "X-Auth-Key", account->api_key);
+    account->name = malloc ( sizeof ( char ) *strlen ( user_name ) + 1 );
+    strcpy ( account->name, user_name );
 
-	do {
-		req->url = urls[url_index];
-		resp = request(req);
+    account->api_key = malloc ( sizeof ( char ) *strlen ( api_key ) + 1 );
+    strcpy ( account->api_key, api_key );
 
-		switch (atoi(resp->status_code)) {
-			case 204:
-				/** @todo Thread safety for the following assignment. */
-				account->management_url = (char *)get_header_from_response((const http_response *)&resp, "X-Storage-Url");
-				account->cdn_management_url = (char *)get_header_from_response((const http_response *)&resp, "X-CDN-Management-Url");
-				account->token = (char *)get_header_from_response((const http_response *)&resp, "X-Auth-Token");
+    add_header_to_request ( req, "X-Auth-User", account->name );
+    add_header_to_request ( req, "X-Auth-Key", account->api_key );
 
-				return 1;
-			case 401:
+    do {
+        req->url = urls[url_index];
+        resp = request ( req );
+
+        switch ( atoi ( resp->status_code ) ) {
+        case 204:
+            /** @todo Thread safety for the following assignment. */
+            account->management_url = ( char * ) get_header_from_response ( ( const http_response * ) &resp, "X-Storage-Url" );
+            account->cdn_management_url = ( char * ) get_header_from_response ( ( const http_response * ) &resp, "X-CDN-Management-Url" );
+            account->token = ( char * ) get_header_from_response ( ( const http_response * ) &resp, "X-Auth-Token" );
+
+            return 1;
+        case 401:
 
 #ifdef EACCESS /*!< @todo Make this work consistently. */
-				errno = EACCESS;
+            errno = EACCESS;
 #endif
 
-				break;
-		}
-	} while (url_index++ < 2);
+            break;
+        }
+    } while ( url_index++ < 2 );
 
-	return 0;
+    return 0;
 }
 
 /*
@@ -137,41 +140,41 @@ const unsigned char authenticate(Account * account, const char user_name[], cons
  * Content-Length: 0
  * X-Account-Container-Count: 5
  */
-const unsigned long long int _get_account_property(Account * account, const _PROPERTY_MAP property, const unsigned char use_cache) {
-	http_request * req = http_request_create();
-	const http_response * resp;
+const unsigned long long int _get_account_property ( Account * account, const _PROPERTY_MAP property, const unsigned char use_cache ) {
+    http_request * req = http_request_create();
+    const http_response * resp;
 
-	if (!use_cache) {
-		add_header_to_request(req, "X-Auth-Token", account->token); /*!< @todo Wrap token in thread-save function. */
+    if ( !use_cache ) {
+        add_header_to_request ( req, "X-Auth-Token", account->token ); /*!< @todo Wrap token in thread-save function. */
 
-		req->url = account->management_url; /*!< @todo Wrap URL in thread-safe function. */
-		req->method = "head";
+        req->url = account->management_url; /*!< @todo Wrap URL in thread-safe function. */
+        req->method = "head";
 
-		resp = request(req);
+        resp = request ( req );
 
-		switch (atoi(resp->status_code)) {
-			case 204:
-				account->properties[_CONTAINER_COUNT] = (unsigned long long int)strtoll(get_header_from_response((const http_response *)&resp, "X-Account-Container-Count"), NULL, 10);
-				account->properties[_OBJECT_COUNT] = (unsigned long long int)strtoll(get_header_from_response((const http_response *)&resp, "X-Account-Object-Count"), NULL, 10);
-				account->properties[_BYTE_COUNT] = (unsigned long long int)strtoll(get_header_from_response((const http_response *)&resp, "X-Account-Bytes-Count"), NULL, 10);
+        switch ( atoi ( resp->status_code ) ) {
+        case 204:
+            account->properties[_CONTAINER_COUNT] = ( unsigned long long int ) strtoll ( get_header_from_response ( ( const http_response * ) &resp, "X-Account-Container-Count" ), NULL, 10 );
+            account->properties[_OBJECT_COUNT] = ( unsigned long long int ) strtoll ( get_header_from_response ( ( const http_response * ) &resp, "X-Account-Object-Count" ), NULL, 10 );
+            account->properties[_BYTE_COUNT] = ( unsigned long long int ) strtoll ( get_header_from_response ( ( const http_response * ) &resp, "X-Account-Bytes-Count" ), NULL, 10 );
 
-				break;
-		}
-	}
+            break;
+        }
+    }
 
-	http_response_free((void *)resp);
+    http_response_free ( ( void * ) resp );
 
-	return account->properties[property];
+    return account->properties[property];
 }
 
-const unsigned long long int get_account_container_count(Account * account, const unsigned char use_cache) {
-	return _get_account_property(account, _CONTAINER_COUNT, use_cache);
+const unsigned long long int get_account_container_count ( Account * account, const unsigned char use_cache ) {
+    return _get_account_property ( account, _CONTAINER_COUNT, use_cache );
 }
 
-const unsigned long long int get_account_object_count(Account * account, const unsigned char use_cache) {
-	return _get_account_property(account, _OBJECT_COUNT, use_cache);
+const unsigned long long int get_account_object_count ( Account * account, const unsigned char use_cache ) {
+    return _get_account_property ( account, _OBJECT_COUNT, use_cache );
 }
 
-const unsigned long long int get_account_byte_count(Account * account, const unsigned char use_cache) {
-	return _get_account_property(account, _BYTE_COUNT, use_cache);
+const unsigned long long int get_account_byte_count ( Account * account, const unsigned char use_cache ) {
+    return _get_account_property ( account, _BYTE_COUNT, use_cache );
 }

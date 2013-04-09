@@ -23,53 +23,53 @@
  * @todo Cache-Control
  */
 
-const unsigned long int get_container_names(char * names[], unsigned long int * length) {
-	http_request req = DEFAULT_HTTP_REQUEST;
-	const http_response * resp;
+const unsigned long int get_container_names ( char * names[], unsigned long int * length ) {
+    http_request req = DEFAULT_HTTP_REQUEST;
+    const http_response * resp;
 
-	char name[256] = "";
-	unsigned short int body_index = 0;
-	unsigned int body_length = 0;
+    char name[256] = "";
+    unsigned short int body_index = 0;
+    unsigned int body_length = 0;
 
-	char tmp[10];
+    char tmp[10];
 
-	add_header_to_request(&req, "X-Auth-Token", auth_data.token);
+    add_header_to_request ( &req, "X-Auth-Token", auth_data.token );
 
-	sprintf(tmp, "%lu", *length);
-	add_query_parameter_to_request(&req, "limit", tmp);
+    sprintf ( tmp, "%lu", *length );
+    add_query_parameter_to_request ( &req, "limit", tmp );
 
-	req.url = auth_data.management_url;
+    req.url = auth_data.management_url;
 
-	resp = request(&req);
+    resp = request ( &req );
 
-	switch (resp->status_code) {
-		case 204:
-			length = 0;
-			names = NULL;
+    switch ( resp->status_code ) {
+    case 204:
+        length = 0;
+        names = NULL;
 
-			break;
-		case 200:
-			body_length = strlen(resp->body);
-			for (body_index = 0; body_index < body_length; ++body_index) {
-				if (resp->body[body_index] == '\n') {
-					names = realloc(names, (++(*length)) * sizeof(name));
-					names[*length] = strncpy(names[*length], name, 256);
-					name[0] = 0;
-				} else
-					strncat(name, (const char *)resp->body[body_index], 1); /*!< @todo Use strtok instead. */
-			}
+        break;
+    case 200:
+        body_length = strlen ( resp->body );
+        for ( body_index = 0; body_index < body_length; ++body_index ) {
+            if ( resp->body[body_index] == '\n' ) {
+                names = realloc ( names, ( ++ ( *length ) ) * sizeof ( name ) );
+                names[*length] = strncpy ( names[*length], name, 256 );
+                name[0] = 0;
+            } else
+                strncat ( name, ( const char * ) resp->body[body_index], 1 ); /*!< @todo Use strtok instead. */
+        }
 
-			break;
-	}
+        break;
+    }
 
-	free_response((void *)resp);
+    free_response ( ( void * ) resp );
 
-	return TRUE;
+    return TRUE;
 }
 
-const unsigned long int get_container_details(container_details details[], unsigned long int * length) {
-	http_request req = DEFAULT_HTTP_REQUEST;
-	const http_response * resp;
+const unsigned long int get_container_details ( container_details details[], unsigned long int * length ) {
+    http_request req = DEFAULT_HTTP_REQUEST;
+    const http_response * resp;
 
 
 }

@@ -12,29 +12,29 @@
 #include "response.h"
 
 http_response* http_response_create() {
-	int index = 0;
+    int index = 0;
 
-	http_response* resp = ( http_response* ) malloc ( sizeof ( http_response ) );
+    http_response* resp = ( http_response* ) malloc ( sizeof ( http_response ) );
 
-	strncpy(resp->http_version, "HTTP/1.1", 9);
-	strncpy(resp->status_code, "200", 4);
-	resp->reason_phrase = NULL;
+    strncpy ( resp->http_version, "HTTP/1.1", 9 );
+    strncpy ( resp->status_code, "200", 4 );
+    resp->reason_phrase = NULL;
 
-	while ( index++ < 90 )
-		resp->headers[index] = NULL;
+    while ( index++ < 90 )
+        resp->headers[index] = NULL;
 
-	resp->body = NULL;
+    resp->body = NULL;
 }
 
 const unsigned char http_response_free ( http_response* resp ) {
-	int index = 0;
+    int index = 0;
 
-	free ( resp->reason_phrase );
+    free ( resp->reason_phrase );
 
-	while ( index++ < 90 )
-		free ( resp->headers[index] );
+    while ( index++ < 90 )
+        free ( resp->headers[index] );
 
-	free ( resp->body );
+    free ( resp->body );
 
-	return 1;
+    return 1;
 }

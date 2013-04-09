@@ -13,14 +13,14 @@
  * @brief An account structure that is populated with management information.
  */
 typedef struct {
-	char * name; /*!< Account Username (Name) */
-	char * api_key; /*!< API key (@todo remove this from memory?). */
+    char * name; /*!< Account Username (Name) */
+    char * api_key; /*!< API key (@todo remove this from memory?). */
 
-	char * management_url; /*!< URL for Cloud Files Management. */
-	char * cdn_management_url; /*!< URL for CDN Management. */
-	char * token; /*!< Token. */
+    char * management_url; /*!< URL for Cloud Files Management. */
+    char * cdn_management_url; /*!< URL for CDN Management. */
+    char * token; /*!< Token. */
 
-	unsigned long long int properties[3]; /*!< Property Cache */
+    unsigned long long int properties[3]; /*!< Property Cache */
 } Account;
 
 /**
@@ -37,7 +37,7 @@ Account * account_create();
  *
  * @return FALSE on error and sets errno; otherwise, TRUE.
  */
-const unsigned char account_free(Account * account);
+const unsigned char account_free ( Account * account );
 
 /**
  * @brief Authenticate the Cloud Account.
@@ -54,15 +54,15 @@ const unsigned char account_free(Account * account);
  * https://lon.identity.api.rackspacecloud.com/v1.0.  This code will be removed
  * when there is only one authentication endpoint.
  */
-const unsigned char authenticate(Account * account, const char user_name[], const char api_key[]);
+const unsigned char authenticate ( Account * account, const char user_name[], const char api_key[] );
 
 /**
  * @brief Map of properties that can be requested in an account.
  */
 typedef enum {
-	_CONTAINER_COUNT = 0, /*!< Count of containers in an account. */
-	_OBJECT_COUNT, /*!< Count of objects in an account. */
-	_BYTE_COUNT /*!< Total bytes used in account. */
+    _CONTAINER_COUNT = 0, /*!< Count of containers in an account. */
+    _OBJECT_COUNT, /*!< Count of objects in an account. */
+    _BYTE_COUNT /*!< Total bytes used in account. */
 } _PROPERTY_MAP;
 
 /**
@@ -90,7 +90,7 @@ typedef enum {
  * @todo Check return type for appropriate sizing for responses.
  *
  */
-const unsigned long long int _get_account_property(Account * account, const _PROPERTY_MAP property, const unsigned char use_cache);
+const unsigned long long int _get_account_property ( Account * account, const _PROPERTY_MAP property, const unsigned char use_cache );
 
 /**
  * @brief Get account's container count.
@@ -100,7 +100,7 @@ const unsigned long long int _get_account_property(Account * account, const _PRO
  *
  * @returns The account's container count.
  */
-const unsigned long long int get_account_container_count(Account * account, const unsigned char use_cache);
+const unsigned long long int get_account_container_count ( Account * account, const unsigned char use_cache );
 
 /**
  * @brief Get account's object count.
@@ -110,7 +110,7 @@ const unsigned long long int get_account_container_count(Account * account, cons
  *
  * @returns The account's object count.
  */
-const unsigned long long int get_account_object_count(Account * account, const unsigned char use_cache);
+const unsigned long long int get_account_object_count ( Account * account, const unsigned char use_cache );
 
 /**
  * @brief Get account's byte count.
@@ -120,6 +120,6 @@ const unsigned long long int get_account_object_count(Account * account, const u
  *
  * @returns The account's byte count.
  */
-const unsigned long long int get_account_byte_count(Account * account, const unsigned char use_cache);
+const unsigned long long int get_account_byte_count ( Account * account, const unsigned char use_cache );
 
 #endif

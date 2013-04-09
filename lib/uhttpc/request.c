@@ -12,16 +12,16 @@
 #include "request.h"
 
 http_request* http_reqeust_create() {
-	int index = 0;
+    int index = 0;
 
     http_request* req = ( http_request* ) malloc ( sizeof ( http_request ) );
 
     req->method = "get";
     req->url = NULL;
-    strncpy(req->http_version, "HTTP/1.1", 9);
+    strncpy ( req->http_version, "HTTP/1.1", 9 );
 
-	while ( index++ < 90 )
-		req->headers[index] = NULL;
+    while ( index++ < 90 )
+        req->headers[index] = NULL;
 
     req->headers[0] = NULL;
 

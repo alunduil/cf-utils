@@ -49,7 +49,7 @@ const unsigned char http_request_free ( http_request * req );
  *
  * @see http_request
  */
-const unsigned char add_query_parameter_to_request(http_request * req, const char query_key[], const char query_value[]);
+const unsigned char add_query_parameter_to_request ( http_request * req, const char query_key[], const char query_value[] );
 
 /**
  * @brief Add a header to an HTTP request.
@@ -62,7 +62,7 @@ const unsigned char add_query_parameter_to_request(http_request * req, const cha
  *
  * @see http_request
  */
-const unsigned char add_header_to_request(http_request * req, const char header_name[], const char header_value[]);
+const unsigned char add_header_to_request ( http_request * req, const char header_name[], const char header_value[] );
 
 /**
  * @brief Get a requested header's value from an HTTP request.
@@ -74,6 +74,6 @@ const unsigned char add_header_to_request(http_request * req, const char header_
  *
  * @returns Header's Value.
  */
-const char * get_header_from_request(const http_request * req, const char header_name[]);
+const char * get_header_from_request ( const http_request * req, const char header_name[] );
 
 #endif
