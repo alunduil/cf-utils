@@ -9,9 +9,12 @@
 #ifndef CF_BINDINGS_CONTAINER
 #define CF_BINDINGS_CONTAINER
 
+#include "account.h"
+
 /**
  * @brief Get an array of container names.
  *
+ * @param[in] account Account for which to get containers' names.
  * @param[in,out] names Array of container names as char[][] which is allocated
  *                      by the call and freed by the caller.
  * @param[in,out] length Length of the container names array.  When used as
@@ -44,7 +47,7 @@
  * backups
  *
  */
-const unsigned long int get_container_names ( char * names[], unsigned long int * length );
+const unsigned long int get_container_names ( const Account * account, char * names[], unsigned long int * length );
 
 /**
  * @brief Details about a container.
@@ -58,6 +61,7 @@ typedef struct {
 /**
  * @brief Get an array of container_details.
  *
+ * @param[in] account The account for which to get containers' details.
  * @param[in,out] details Array of container_details which is allocated by the
  *                        call and freed by the caller.
  * @param[in,out] length Length of the container_details array.  When used as
@@ -116,6 +120,6 @@ typedef struct {
  *   </container>
  * </account>
  */
-const unsigned long int get_container_details ( container_details details[], unsigned long int * length );
+const unsigned long int get_container_details ( const Account * account, container_details details[], unsigned long int * length );
 
 #endif

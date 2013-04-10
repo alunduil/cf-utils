@@ -6,13 +6,15 @@
  * See COPYING or http://www.opensource.org/licenses/mit-license.php.
  */
 
+#include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 
-#include "bindings/authentication.h"
-#include "bindings/helpers.h"
+#include "../uhttpc/request.h"
+#include "../uhttpc/response.h"
+#include "../uhttpc/actions.h"
 
-#include "bindings/container.h"
+#include "container.h"
 
 /**
  * @todo URL Encode Names
@@ -23,52 +25,54 @@
  * @todo Cache-Control
  */
 
-const unsigned long int get_container_names ( char * names[], unsigned long int * length ) {
-    http_request req = DEFAULT_HTTP_REQUEST;
+const unsigned long int get_container_names ( const Account * account, char * names[], unsigned long int * length ) {
+    http_request * req = http_request_create();
     const http_response * resp;
 
     char name[256] = "";
     unsigned short int body_index = 0;
     unsigned int body_length = 0;
 
-    char tmp[10];
+    char name_length[10];
 
-    add_header_to_request ( &req, "X-Auth-Token", auth_data.token );
+    add_header_to_request ( req, "X-Auth-Token", account->token );
 
-    sprintf ( tmp, "%lu", *length );
-    add_query_parameter_to_request ( &req, "limit", tmp );
+    sprintf ( name_length, "%lu", *length );
+    add_query_parameter_to_request ( req, "limit", name_length );
 
-    req.url = auth_data.management_url;
+    req->url = account->management_url;
 
-    resp = request ( &req );
+    resp = request ( req );
 
-    switch ( resp->status_code ) {
+    *length = 0;
+
+    switch ( atoi ( resp->status_code ) ) {
     case 204:
-        length = 0;
         names = NULL;
 
         break;
     case 200:
         body_length = strlen ( resp->body );
-        for ( body_index = 0; body_index < body_length; ++body_index ) {
+        do {
             if ( resp->body[body_index] == '\n' ) {
                 names = realloc ( names, ( ++ ( *length ) ) * sizeof ( name ) );
-                names[*length] = strncpy ( names[*length], name, 256 );
+                strncpy ( names[*length], name, 256 );
                 name[0] = 0;
             } else
-                strncat ( name, ( const char * ) resp->body[body_index], 1 ); /*!< @todo Use strtok instead. */
-        }
+                strncat ( name, &resp->body[body_index], 1 );
+        } while ( body_index < body_index++ );
 
         break;
     }
 
-    free_response ( ( void * ) resp );
+    http_request_free ( ( void * ) req );
+    http_response_free ( ( void * ) resp );
 
-    return TRUE;
+    return * length;
 }
 
-const unsigned long int get_container_details ( container_details details[], unsigned long int * length ) {
-    http_request req = DEFAULT_HTTP_REQUEST;
+const unsigned long int get_container_details ( const Account * account, container_details details[], unsigned long int * length ) {
+    http_request * req = http_request_create();
     const http_response * resp;
 
 

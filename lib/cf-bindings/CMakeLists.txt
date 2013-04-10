@@ -10,7 +10,13 @@ set_target_properties(cf-bindings PROPERTIES VERSION ${CF_UTILS_VERSION} SOVERSI
 install(TARGETS cf-bindings
   RUNTIME DESTINATION bin COMPONENT Runtime
   LIBRARY DESTINATION lib COMPONENT Runtime
-  ARCHIVE DESTINATION lib/rackspace/cloudfiles COMPONENT Development)
+  ARCHIVE DESTINATION lib/rackspace/cloudfiles COMPONENT Development
+  )
+
+install(TARGETS cf-bindings
+  DESTINATION lib EXPORT cf-bindings-lib
+  )
+install(EXPORT cf-bindings-lib DESTINATION lib/rackspace/cloudfiles)
 
 install(FILES ${CF_BINDINGS_HEADERS} DESTINATION include/rackspace/cloudfiles)
 
