@@ -82,11 +82,11 @@ const unsigned char authenticate ( Account * account, const char user_name[], co
 
     char * urls[2];
 
-	urls[0] = malloc ( sizeof ( char ) * 44 + 1);
-	strncpy( urls[0], "https://identity.api.rackspacecloud.com/v1.0", 45);
+    urls[0] = malloc ( sizeof ( char ) * 44 + 1 );
+    strncpy ( urls[0], "https://identity.api.rackspacecloud.com/v1.0", 45 );
 
-	urls[1] = malloc ( sizeof ( char ) * 48 + 1);
-	strncpy( urls[1], "https://lon.identity.api.rackspacecloud.com/v1.0", 49);
+    urls[1] = malloc ( sizeof ( char ) * 48 + 1 );
+    strncpy ( urls[1], "https://lon.identity.api.rackspacecloud.com/v1.0", 49 );
 
     account->name = malloc ( sizeof ( char ) *strlen ( user_name ) + 1 );
     strcpy ( account->name, user_name );

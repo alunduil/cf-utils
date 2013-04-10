@@ -1,1 +1,1 @@
-install(FILES FindCFBINDINGS.cmake DESTINATION share/cf-utils/cmake)
+install(FILES FindCFBINDINGS.cmake DESTINATION share/${PROJECT_NAME}/cmake)
