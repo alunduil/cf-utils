@@ -6,14 +6,6 @@
  * See COPYING or http://www.opensource.org/licenses/mit-license.php.
  */
 
-/**
- * Query Parameters:
- *  :limit: Number of results to return.
- *  :marker: Return container names greater than passed UTF-8 string.
- *  :end_marker: Return container names less than passed UTF-8 string.
- *  :format: json or xml to get the requested format.
- */
-
 #include <stdlib.h>
 #include <string.h>
 #include <limits.h>
@@ -35,9 +27,9 @@ Account* account_create() {
     account->cdn_management_url = NULL;
     account->token = NULL;
 
-    account->properties[_CONTAINER_COUNT] = ULLONG_MAX;
-    account->properties[_OBJECT_COUNT] = ULLONG_MAX;
-    account->properties[_BYTE_COUNT] = ULLONG_MAX;
+    account->_properties[_CONTAINER_COUNT] = ULLONG_MAX;
+    account->_properties[_OBJECT_COUNT] = ULLONG_MAX;
+    account->_properties[_BYTE_COUNT] = ULLONG_MAX;
 
     return account;
 }
@@ -54,6 +46,8 @@ const unsigned char account_free ( Account* account ) {
 }
 
 /**
+ * @todo Test the following in uhttpc…
+ *
  * Example Request HTTP:
  *
  * GET /v1.0 HTTP/1.1
@@ -78,20 +72,30 @@ const unsigned char authenticate ( Account * account, const char user_name[], co
     http_request * req = http_request_create();
     const http_response * resp;
 
+    unsigned char ret = 0;
+
     unsigned char url_index = 0;
 
     char * urls[2];
 
-    urls[0] = malloc ( sizeof ( char ) * 44 + 1 );
+    /**
+     * Tries to request a login token from the authentication endpoint by first
+     * trying the global endpoint URL, https://identity.api.rackspacecloud.com/v1.0.
+     * If this URL doesn't let the user authenticate we try the London endpoint,
+     * https://lon.identity.api.rackspacecloud.com/v1.0.  This code will be removed
+     * when there is only one authentication endpoint.
+     */
+
+    urls[0] = malloc ( sizeof ( char ) * ( 44 + 1 ) );
     strncpy ( urls[0], "https://identity.api.rackspacecloud.com/v1.0", 45 );
 
-    urls[1] = malloc ( sizeof ( char ) * 48 + 1 );
+    urls[1] = malloc ( sizeof ( char ) * ( 48 + 1 ) );
     strncpy ( urls[1], "https://lon.identity.api.rackspacecloud.com/v1.0", 49 );
 
-    account->name = malloc ( sizeof ( char ) *strlen ( user_name ) + 1 );
+    account->name = malloc ( sizeof ( char ) * ( strlen ( user_name ) + 1 ) );
     strcpy ( account->name, user_name );
 
-    account->api_key = malloc ( sizeof ( char ) *strlen ( api_key ) + 1 );
+    account->api_key = malloc ( sizeof ( char ) * ( strlen ( api_key ) + 1 ) );
     strcpy ( account->api_key, api_key );
 
     add_header_to_request ( req, "X-Auth-User", account->name );
@@ -99,30 +103,37 @@ const unsigned char authenticate ( Account * account, const char user_name[], co
 
     do {
         req->url = urls[url_index];
-        resp = request ( req );
+        resp = http ( req );
 
         switch ( atoi ( resp->status_code ) ) {
         case 204:
-            /** @todo Thread safety for the following assignment. */
-            account->management_url = ( char * ) get_header_from_response ( ( const http_response * ) &resp, "X-Storage-Url" );
-            account->cdn_management_url = ( char * ) get_header_from_response ( ( const http_response * ) &resp, "X-CDN-Management-Url" );
-            account->token = ( char * ) get_header_from_response ( ( const http_response * ) &resp, "X-Auth-Token" );
+            /** @todo Thread safety for the following assignment or let user handle? */
+            account->management_url = get_header_from_response ( resp, "X-Storage-Url" );
+            account->cdn_management_url = get_header_from_response ( resp, "X-CDN-Management-Url" );
+            account->token = get_header_from_response ( resp, "X-Auth-Token" );
 
-            return 1;
+            ret = 1;
+
+            break;
         case 401:
-
-#ifdef EACCESS /*!< @todo Make this work consistently. */
-            errno = EACCESS;
-#endif
+            errno = EACCES;
 
             break;
         }
-    } while ( url_index++ < 2 );
+    } while ( !ret && url_index++ < 2 );
 
-    return 0;
+    free ( urls[0] );
+    free ( urls[1] );
+
+    http_request_free ( req );
+    http_response_free ( resp );
+
+    return ret;
 }
 
-/*
+/**
+ * @todo Test the following in uhttpc …
+ *
  * Example HTTP Request:
  *
  * HEAD /v1.0/jdoe HTTP/1.1
@@ -150,21 +161,22 @@ const unsigned long long int _get_account_property ( Account * account, const _P
         req->url = account->management_url; /*!< @todo Wrap URL in thread-safe function. */
         req->method = "head";
 
-        resp = request ( req );
+        resp = http ( req );
 
         switch ( atoi ( resp->status_code ) ) {
         case 204:
-            account->properties[_CONTAINER_COUNT] = ( unsigned long long int ) strtoll ( get_header_from_response ( ( const http_response * ) &resp, "X-Account-Container-Count" ), NULL, 10 );
-            account->properties[_OBJECT_COUNT] = ( unsigned long long int ) strtoll ( get_header_from_response ( ( const http_response * ) &resp, "X-Account-Object-Count" ), NULL, 10 );
-            account->properties[_BYTE_COUNT] = ( unsigned long long int ) strtoll ( get_header_from_response ( ( const http_response * ) &resp, "X-Account-Bytes-Count" ), NULL, 10 );
+            account->_properties[_CONTAINER_COUNT] = strtoull ( get_header_from_response ( resp, "X-Account-Container-Count" ), NULL, 10 );
+            account->_properties[_OBJECT_COUNT] = strtoull ( get_header_from_response ( resp, "X-Account-Object-Count" ), NULL, 10 );
+            account->_properties[_BYTE_COUNT] = strtoull ( get_header_from_response ( resp, "X-Account-Bytes-Count" ), NULL, 10 );
 
             break;
         }
     }
 
-    http_response_free ( ( void * ) resp );
+    http_request_free ( req );
+    http_response_free ( resp );
 
-    return account->properties[property];
+    return account->_properties[property];
 }
 
 const unsigned long long int get_account_container_count ( Account * account, const unsigned char use_cache ) {

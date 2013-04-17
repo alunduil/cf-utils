@@ -6,7 +6,7 @@ set (UHTTPC_SOURCES ${UHTTPC_SOURCES} request.c)
 set (UHTTPC_SOURCES ${UHTTPC_SOURCES} response.c)
 set (UHTTPC_SOURCES ${UHTTPC_SOURCES} actions.c)
 
-add_library(uhttpc SHARED ${UHTTPC_HEADERS} ${UHTTPC_SOURCES})
+add_library(uhttpc ${UHTTPC_HEADERS} ${UHTTPC_SOURCES})
 set_target_properties(uhttpc PROPERTIES VERSION ${CF_UTILS_VERSION} SOVERSION 1)
 
 install(TARGETS uhttpc

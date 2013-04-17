@@ -10,42 +10,7 @@
 #include <stdlib.h>
 #include <errno.h>
 
-#include "bindings/account.h"
-
-START_TEST ( test_account_create_success ) {
-    errno = 0;
-
-    Account * a = account_create();
-
-    if ( errno != 0 )
-        fail ( "Error status changed during account_create call!" );
-
-    fail_if ( a == NULL, "Account struct not initialized!" );
-}
-END_TEST
-
-START_TEST ( test_account_create_failure ) {
-#if 0
-    /**
-     * @todo Add tests like the following as conditions are reported as not
-     *       being handled correctly.
-     */
-    errno = 0;
-    if ( account_create() == NULL ) {
-        fail_unless ( errno == ENOMEM, "Couldn't allocate memory" );
-    }
-#endif
-}
-END_TEST
-
-START_TEST ( test_account_free ) {
-    Account * a = account_create(); /*!< @todo Mock account create or hand code? */
-
-    account_free ( a );
-
-    fail_unless ( a == NULL, "Memory not properly freed" );
-}
-END_TEST
+#include "test_account_creation.h"
 
 START_TEST ( test_get_account_property ) {
     Account * a = account_create();
@@ -54,9 +19,9 @@ START_TEST ( test_get_account_property ) {
      * @todo Mock things …
      */
 
-    fail_unless ( _get_account_property ( a, CONTAINER_COUNT, FALSE ) == 3, "Incorrect container account returned!" );
+    fail_unless ( _get_account_property ( a, _CONTAINER_COUNT, 1 ) == 3, "Incorrect container account returned!" );
 
-    fail_unless ( _get_account_property ( a, CONTAINER_COUNT, TRUE ) == 3, "Incorrect container account returned!" );
+    fail_unless ( _get_account_property ( a, _CONTAINER_COUNT, 0 ) == 3, "Incorrect container account returned!" );
 
     /**
      * @todo Check accesses to request function.

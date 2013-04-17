@@ -20,7 +20,7 @@ typedef struct {
     char * cdn_management_url; /*!< URL for CDN Management. */
     char * token; /*!< Token. */
 
-    unsigned long long int properties[3]; /*!< Property Cache */
+    unsigned long long int _properties[3]; /*!< Property Cache */
 } Account;
 
 /**
@@ -35,7 +35,7 @@ Account * account_create();
  *
  * @param[in] account Account struct to be de-allocated.
  *
- * @return FALSE on error and sets errno; otherwise, TRUE.
+ * @return 0 on error and sets errno; otherwise, 1.
  */
 const unsigned char account_free ( Account * account );
 
@@ -47,12 +47,6 @@ const unsigned char account_free ( Account * account );
  * @param[in] api_key Cloud Account API Key used to authenticate.
  *
  * @returns 0 on error and sets errno; otherwise, 1.
- *
- * Tries to request a login token from the authentication endpoint by first
- * trying the global endpoint URL, https://identity.api.rackspacecloud.com/v1.0.
- * If this URL doesn't let the user authenticate we try the London endpoint,
- * https://lon.identity.api.rackspacecloud.com/v1.0.  This code will be removed
- * when there is only one authentication endpoint.
  */
 const unsigned char authenticate ( Account * account, const char user_name[], const char api_key[] );
 
@@ -88,7 +82,6 @@ typedef enum {
  * through the static cache variable.
  *
  * @todo Check return type for appropriate sizing for responses.
- *
  */
 const unsigned long long int _get_account_property ( Account * account, const _PROPERTY_MAP property, const unsigned char use_cache );
 
@@ -97,6 +90,8 @@ const unsigned long long int _get_account_property ( Account * account, const _P
  *
  * @param[in] use_cache Use cached values if present and this parameter is TRUE;
  *                      otherwise, query the API for fresh values.
+ *
+ * @note Maximum of 500,000 containers.
  *
  * @returns The account's container count.
  */

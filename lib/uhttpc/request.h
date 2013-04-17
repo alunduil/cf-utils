@@ -10,6 +10,13 @@
 #define CF_UHTTPC_REQUEST_H
 
 /**
+ * Upstream limitations on HTTP…
+ *
+ * @note Maximum HTTP request line length: 8192 bytes.
+ * @note Maximum size of HTTP request: 5GB
+ */
+
+/**
  * @brief Model of an HTTP request.
  * @note Default values are provided by DEFAULT_HTTP_REQUEST.
  */
@@ -18,6 +25,9 @@ typedef struct {
     char * url; /*!< URL. */
     char http_version[9]; /*!< HTTP Version. */
 
+    unsigned char query_count; /*!< Number of query parameters on URL. */
+
+    unsigned char header_count; /*!< Length of Headers array. */
     char * headers[90]; /*!< Array of Headers in the form: HEADER:VALUE. */
 
     char * body; /*!< Optional Body */
@@ -57,6 +67,9 @@ const unsigned char add_query_parameter_to_request ( http_request * req, const c
  * @param[in,out] req HTTP Request
  * @param[in] header_name HTTP Header Name
  * @param[in] header_value HTTP Header Value
+ *
+ * @note Maximum of 90 headers per request.
+ * @note Maximum of 4096 bytes for all headers
  *
  * @returns 0 if an error and sets errno; otherwise, 1
  *

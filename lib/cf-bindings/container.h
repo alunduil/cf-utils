@@ -12,114 +12,87 @@
 #include "account.h"
 
 /**
+ * Upstream container property notes:
+ *
+ * @note Maximum of 500,000 containers.
+ * @note No / in container names.
+ * @note Less than 256 bytes in length.
+ * @note Container name length is after URL encoding.
+ */
+
+/**
+ * @brief Container data structure.
+ */
+typedef struct {
+	char name[256]; /*!< Container Name. */
+
+	unsigned long long int object_count; /*!< Number of objects in container. */
+	unsigned long long int byte_count; /*!< Number of bytes in container. */
+} Container;
+
+/**
+ * @brief Initialize a new container structure.
+ *
+ * @returns Container struct allocated by this call.
+ */
+Container * container_create();
+
+/**
+ * @brief Free a container structure.
+ *
+ * @param[in] container Container struct to be de-allocated.
+ *
+ * @return 0 on error and sets errno; otherwise, 1.
+ */
+const unsigned char container_free ( Container * container );
+
+/**
  * @brief Get an array of container names.
  *
  * @param[in] account Account for which to get containers' names.
- * @param[in,out] names Array of container names as char[][] which is allocated
- *                      by the call and freed by the caller.
- * @param[in,out] length Length of the container names array.  When used as
- *                       input, a non-zero value sets a limit on the number of
- *                       names to be returned.
+ * @param[in,out] containers Array of Containers that will be allocated if NULL;
+ *                           otherwise, names will be merged (duplicates removed
+ *                           and others concatenated) with existing entries.
+ * @param[in,out] length Length of the Container array.  When used as input, a
+ *                       non-zero value sets a limit on the number of names to
+ *                       be returned.
  *
  * @todo Add marker and end_marker support into this function.
  *
- * @returns FALSE if an error occurs and sets errno; otherwise, equivalent to
- *          length.
+ * @returns 0 if an error occurs and sets errno; otherwise, length.
  *
- * @warning If length is zero on return, names will be a null pointer!
- *
- * Example HTTP Request:
- *
- * GET /v1.0/jdoe HTTP/1.1
- * Host: storage.clouddrive.com
- * X-Auth-Token: eaaafd18-0fed-4b3a-81b4-663c99ec1cbb
- *
- * Example HTTP Response:
- *
- * HTTP/1.1 200 Ok
- * Date: Thu, 07 Jun 2007 18:57:07 GMT
- * Content-Type: text/plain; charset=UTF-8
- * Content-Length: 32
- *
- * images
- * movies
- * documents
- * backups
- *
+ * @warning If length is zero on return, containers will be a null pointer!
  */
-const unsigned long int get_container_names ( const Account * account, char * names[], unsigned long int * length );
+const unsigned long int get_container_names ( const Account * account, Container containers[], unsigned long int * length );
 
 /**
- * @brief Details about a container.
+ * @brief Determine if a name is already in a list of containers.
+ *
+ * @param[in] name The name to search for in the array of containers.
+ * @param[in] containers The array of Containers to search for the name.
+ * @param[in] length The length of the container array.
+ *
+ * @returns The count of that name in the array (should be 0 or 1).
  */
-typedef struct {
-    char name[256]; /*!< Name of the container. */
-    unsigned long long int object_count; /*!< Number of objects in container. */
-    unsigned long long int byte_count; /*!< Number of bytes in container. */
-} container_details;
+const unsigned char _is_name_element_of_containers( const char name[], const Container containers[], const unsigned long int length );
 
 /**
- * @brief Get an array of container_details.
+ * @brief Get or populate an array of Containers.
  *
  * @param[in] account The account for which to get containers' details.
- * @param[in,out] details Array of container_details which is allocated by the
- *                        call and freed by the caller.
+ * @param[in,out] containers Array of Containers that will be allocated if NULL;
+ *                           otherwise, details for the existing entries will be
+ *                           added to the passed array.
  * @param[in,out] length Length of the container_details array.  When used as
  *                       input, a non-zero value sets a limit on the number of
  *                       names to be returned.
  *
  * @todo Add marker and end_marker support into this function.
  *
- * @returns FALSE if an error occurs and sets errno; otherwise, equivalent to
- *          length.
+ * @returns 0 if an error occurs and sets errno; otherwise, 1
  *
  * @warning If length is zero on return, details will be a null pointer!
- *
- * Example HTTP Request (JSON):
- *
- * GET /v1.0/jdoe?format=json HTTP/1.1
- * Host: storage.clouddrive.com
- * Content-Length: 0
- * X-Storage-Token: 182f9x0af0e828cfe3281767d29d19f4
- *
- * Example HTTP Response (JSON):
- *
- * HTTP/1.1 200 OK
- * Date: Tue, 25 Nov 2008 19:39:13 GMT
- * Content-Type: application/json; charset=UTF-8
- *
- * [
- *   { "name": "test_container_1", "count": 2, "bytes": 78 },
- *   { "name": "test_container_2", "count": 1, "bytes": 17 }
- * ]
- *
- * Example HTTP Request (XML):
- *
- * GET /v1.0/jdoe?format=xml HTTP/1.1
- * Host: storage.clouddrive.com
- * Content-Length: 0
- * X-Storage-Token: 182f9x0af0e828cfe3281767d29d19f4
- *
- * Example HTTP Response (JSON):
- *
- * HTTP/1.1 200 OK
- * Date: Tue, 25 Nov 2008 19:42:35 GMT
- * Content-Type: application/xml; charset=UTF-8
- *
- * <?xml version="1.0" encoding="UTF-8"?>
- * <account name="MichaelBarton">
- *   <container>
- *     <name>test_container_1</name>
- *     <count>2</count>
- *     <bytes>78</bytes>
- *   </container>
- *   <container>
- *     <name>test_container_2</name>
- *     <count>1</count>
- *     <bytes>17</bytes>
- *   </container>
- * </account>
  */
-const unsigned long int get_container_details ( const Account * account, container_details details[], unsigned long int * length );
+const unsigned long int get_container_details ( const Account * account, Container containers[], unsigned long int * length );
 
 #endif

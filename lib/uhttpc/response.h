@@ -60,6 +60,8 @@ const unsigned char add_header_to_response ( http_response * resp, const char he
  *
  * @see http_response
  *
+ * @todo Remove const declaration?
+ *
  * @returns Header's Value.
  */
 const char * get_header_from_response ( const http_response * resp, const char header_name[] );
