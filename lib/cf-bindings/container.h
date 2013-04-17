@@ -24,10 +24,10 @@
  * @brief Container data structure.
  */
 typedef struct {
-	char name[256]; /*!< Container Name. */
+    char name[256]; /*!< Container Name. */
 
-	unsigned long long int object_count; /*!< Number of objects in container. */
-	unsigned long long int byte_count; /*!< Number of bytes in container. */
+    unsigned long long int object_count; /*!< Number of objects in container. */
+    unsigned long long int byte_count; /*!< Number of bytes in container. */
 } Container;
 
 /**
@@ -73,8 +73,11 @@ const unsigned long int get_container_names ( const Account * account, Container
  * @param[in] length The length of the container array.
  *
  * @returns The count of that name in the array (should be 0 or 1).
+ *
+ * @warning Not meant for typical consumption but this function has not side
+ *          effects so feel free.
  */
-const unsigned char _is_name_element_of_containers( const char name[], const Container containers[], const unsigned long int length );
+const unsigned char _is_name_element_of_containers ( const char name[], const Container containers[], const unsigned long int length );
 
 /**
  * @brief Get or populate an array of Containers.

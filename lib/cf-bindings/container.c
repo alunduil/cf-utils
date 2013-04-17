@@ -78,7 +78,7 @@ const unsigned long int get_container_names ( const Account * account, Container
         do {
             name = strtok ( haystack, "\n" );
 
-            if ( name == NULL || _is_name_element_of_containers(name, containers, *length) ) break;
+            if ( name == NULL || _is_name_element_of_containers ( name, containers, *length ) ) break;
 
             haystack = NULL;
 
@@ -96,15 +96,15 @@ const unsigned long int get_container_names ( const Account * account, Container
 }
 
 const unsigned char _is_name_element_of_containers ( const char name[], const Container containers[], const long unsigned int length ) {
-	long unsigned int index = 0;
+    long unsigned int index = 0;
 
-	unsigned char ret = 0;
+    unsigned char ret = 0;
 
-	do {
-		if ( containers[index].name == name ) ++ret;
-	} while (++index < length);
+    do {
+        if ( containers[index].name == name ) ++ret;
+    } while ( ++index < length );
 
-	return ret;
+    return ret;
 }
 
 const unsigned long int get_container_details ( const Account * account, Container containers[], unsigned long int * length ) {
