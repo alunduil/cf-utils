@@ -1,7 +1,13 @@
 language: c
 compiler:
-  - clang
   - gcc
+  - clang
+env:
+  global:
+  matrix:
+before_install:
+  - sudo apt-get update
+install:
 before_script:
   - mkdir build
   - cd build
@@ -9,3 +15,6 @@ before_script:
 script:
   - make install
   - make test
+after_success:
+after_failure:
+after_script:
