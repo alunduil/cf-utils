@@ -9,7 +9,8 @@
 #ifndef CF_BINDINGS_CONTAINER
 #define CF_BINDINGS_CONTAINER
 
-#include "account.h"
+#define MAX_CONTAINER_NUM 500000
+#define MAX_CONTAINER_NAME_LENGTH 256
 
 /**
  * Upstream container property notes:
@@ -24,10 +25,14 @@
  * @brief Container data structure.
  */
 typedef struct {
-    char name[256]; /*!< Container Name. */
+    char name[MAX_CONTAINER_NAME_LENGTH + 1]; /*!< Container Name. */
 
-    unsigned long long int object_count; /*!< Number of objects in container. */
-    unsigned long long int byte_count; /*!< Number of bytes in container. */
+    unsigned short int cdn_enabled; /*!< CDN Enabled? */
+    char * cdn_url; /*!< CDN URL */
+    unsigned int cdn_ttl; /*!< CDN TTL */
+
+    unsigned long int object_count; /*!< Number of objects in container. */
+    unsigned long int byte_count; /*!< Number of bytes in container. */
 } Container;
 
 /**
@@ -44,8 +49,26 @@ Container * container_create();
  *
  * @return 0 on error and sets errno; otherwise, 1.
  */
-const unsigned char container_free ( Container * container );
+void container_free ( Container * container );
 
+/**
+ * @brief URL-encode the container's name and return the result.
+ *
+ * Container names in Cloud Files must be URL-encoded.  We encode any special
+ * characters and check for the presence of any '/' characters—deemed illegal by
+ * upstream.
+ *
+ * @warn '/' is an illegal character and will cause an error!
+ *
+ * @param[in]     container Container whose name we are URL-encoding.
+ * @param[in,out] name      The resulting name after encoding or as much
+ *                          encoding as was performed if an error occurred.
+ *
+ * @return A pointer to the encoded string or NULL if an error occurred.
+ */
+char * container_encode_name(Container * container, char * name);
+
+#if 0
 /**
  * @brief Get an array of container names.
  *
@@ -63,7 +86,7 @@ const unsigned char container_free ( Container * container );
  *
  * @warning If length is zero on return, containers will be a null pointer!
  */
-const unsigned long int get_container_names ( const Account * account, Container containers[], unsigned long int * length );
+unsigned long int get_container_names ( const Account * account, Container containers[], unsigned long int * length );
 
 /**
  * @brief Determine if a name is already in a list of containers.
@@ -77,7 +100,7 @@ const unsigned long int get_container_names ( const Account * account, Container
  * @warning Not meant for typical consumption but this function has not side
  *          effects so feel free.
  */
-const unsigned char _is_name_element_of_containers ( const char name[], const Container containers[], const unsigned long int length );
+unsigned char _is_name_element_of_containers ( const char name[], const Container containers[], const unsigned long int length );
 
 /**
  * @brief Get or populate an array of Containers.
@@ -96,6 +119,7 @@ const unsigned char _is_name_element_of_containers ( const char name[], const Co
  *
  * @warning If length is zero on return, details will be a null pointer!
  */
-const unsigned long int get_container_details ( const Account * account, Container containers[], unsigned long int * length );
+unsigned long int get_container_details ( const Account * account, Container containers[], unsigned long int * length );
 
+#endif
 #endif

@@ -1,6 +1,4 @@
-find_library(CHECK_LIBRARY
-  NAMES check
-  )
+find_library(CHECK_LIBRARY NAMES check)
 
-add_subdirectory(test_unit)
-add_subdirectory(test_integration)
+#add_subdirectory(fixtures)
+add_subdirectory(units)

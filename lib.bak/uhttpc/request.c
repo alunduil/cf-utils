@@ -12,7 +12,7 @@
 
 #include "request.h"
 
-http_request* http_reqeust_create() {
+http_request* http_request_create() {
     int index = 0;
 
     http_request* req = ( http_request* ) malloc ( sizeof ( http_request ) );
@@ -29,9 +29,11 @@ http_request* http_reqeust_create() {
         req->headers[index] = NULL;
 
     req->body = NULL;
+
+    return req;
 }
 
-const unsigned char http_request_free ( http_request* req ) {
+unsigned char http_request_free ( http_request* req ) {
     int index = 0;
 
     free ( req->method );
@@ -45,7 +47,7 @@ const unsigned char http_request_free ( http_request* req ) {
     return 1;
 }
 
-const unsigned char add_query_parameter_to_request ( http_request * req, const char query_key[], const char query_value[] ) {
+unsigned char add_query_parameter_to_request ( http_request * req, const char query_key[], const char query_value[] ) {
     char prefix[2] = "&";
 
     if ( req->query_count > 0 )
@@ -61,7 +63,7 @@ const unsigned char add_query_parameter_to_request ( http_request * req, const c
     return 1;
 }
 
-const unsigned char add_header_to_request ( http_request * req, const char header_name[], const char header_value[] ) {
+unsigned char add_header_to_request ( http_request * req, const char header_name[], const char header_value[] ) {
     if ( req->header_count + 1 >= 90 ) {
         errno = ENOSPC;
         return 0;

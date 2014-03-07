@@ -1,0 +1,2 @@
+add_library(fixtures_authentication fixtures_authentication.h fixtures_authentication.c)
+target_link_libraries(fixtures_authentication uhttpc)

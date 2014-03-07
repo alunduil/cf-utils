@@ -1,6 +1,7 @@
 /**
- * @copyright 2013
  * @author Alex Brandt
+ * @copyright MIT
+ * @date 2014
  *
  * cf-utils is freely distributable under the terms of an MIT-style license.
  * See COPYING or http://www.opensource.org/licenses/mit-license.php.
@@ -9,35 +10,32 @@
 #ifndef CF_UHTTPC_RESPONSE_H
 #define CF_UHTTPC_RESPONSE_H
 
-/**
- * @brief Model of an HTTP response.
- * @note Default values are provided by DEFAULT_HTTP_RESPONSE.
- */
+#include "common.h"
+
 typedef struct {
     char http_version[9]; /*!< HTTP Version. */
     char status_code[4]; /*!< HTTP Status Code. */
     char * reason_phrase; /*!< HTTP Reason Phrase. */
 
-    char * headers[90]; /*!< Array of Headers in the form: HEADER:VALUE. */
+    HTTPHeader * headers; /*!< HTTP Headers */
+    unsigned char header_count; /*!< HTTP Header Count */
 
-    char * body; /*!< Optional Body */
-} http_response;
+    char * body; /*!< HTTP Body */
+} HTTPResponse;
 
 /**
- * @brief Allocate an http_response and initialize parameters to defaults.
+ * @brief Allocate an HTTPResponse with sane defaults.
  *
- * @returns An initialized http_response pointer.
+ * @returns An initialized HTTPResponse pointer.
  */
-http_response * http_response_create();
+HTTPResponse * http_response_create();
 
 /**
  * @brief Properly free an http_response.
  *
  * @param[in] resp The response to free.
- *
- * @returns 0 if an error occurs (also sets errno); otherwise, 1.
  */
-const unsigned char http_response_free ( http_response * resp );
+void http_response_free(HTTPResponse * resp);
 
 /**
  * @brief Add a header to an HTTP response.
@@ -50,7 +48,7 @@ const unsigned char http_response_free ( http_response * resp );
  *
  * @see http_response
  */
-const unsigned char add_header_to_response ( http_response * resp, const char header_name[], const char header_value[] );
+unsigned char add_header_to_response ( HTTPResponse * resp, const char header_name[], const char header_value[] );
 
 /**
  * @brief Get a particular header's value from an HTTP response.
@@ -64,6 +62,6 @@ const unsigned char add_header_to_response ( http_response * resp, const char he
  *
  * @returns Header's Value.
  */
-const char * get_header_from_response ( const http_response * resp, const char header_name[] );
+char * get_header_from_response ( const HTTPResponse * resp, const char header_name[] );
 
 #endif

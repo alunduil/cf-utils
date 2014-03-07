@@ -9,29 +9,17 @@
 #ifndef CF_UHTTPC_REQUEST_H
 #define CF_UHTTPC_REQUEST_H
 
-/**
- * Upstream limitations on HTTP…
- *
- * @note Maximum HTTP request line length: 8192 bytes.
- * @note Maximum size of HTTP request: 5GB
- */
-
-/**
- * @brief Model of an HTTP request.
- * @note Default values are provided by DEFAULT_HTTP_REQUEST.
- */
 typedef struct {
-    char * method; /*!< HTTP Method. */
+    char method[7]; /*!< HTTP Method. */
     char * url; /*!< URL. */
     char http_version[9]; /*!< HTTP Version. */
 
     unsigned char query_count; /*!< Number of query parameters on URL. */
 
-    unsigned char header_count; /*!< Length of Headers array. */
-    char * headers[90]; /*!< Array of Headers in the form: HEADER:VALUE. */
+    char * headers; /*!< Array of Headers in the form: HEADER:VALUE. */
 
     char * body; /*!< Optional Body */
-} http_request;
+} HTTPRequest;
 
 /**
  * @brief Allocate an http_request and initialize parameters to defaults.
@@ -47,7 +35,7 @@ http_request * http_request_create();
  *
  * @returns 0 if an error occurs (also sets errno); otherwise, 1.
  */
-const unsigned char http_request_free ( http_request * req );
+unsigned char http_request_free ( http_request * req );
 
 /**
  * @brief Add query parameter to HTTP request.
@@ -59,7 +47,7 @@ const unsigned char http_request_free ( http_request * req );
  *
  * @see http_request
  */
-const unsigned char add_query_parameter_to_request ( http_request * req, const char query_key[], const char query_value[] );
+unsigned char add_query_parameter_to_request ( http_request * req, const char query_key[], const char query_value[] );
 
 /**
  * @brief Add a header to an HTTP request.
@@ -75,7 +63,7 @@ const unsigned char add_query_parameter_to_request ( http_request * req, const c
  *
  * @see http_request
  */
-const unsigned char add_header_to_request ( http_request * req, const char header_name[], const char header_value[] );
+unsigned char add_header_to_request ( http_request * req, const char header_name[], const char header_value[] );
 
 /**
  * @brief Get a requested header's value from an HTTP request.
