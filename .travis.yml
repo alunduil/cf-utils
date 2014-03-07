@@ -14,8 +14,8 @@ before_script:
   - cd build
   - cmake ..
 script:
-  - make install
   - make test
+  - ctest -D Continuous
 after_success:
 after_failure:
 after_script:
