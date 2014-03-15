@@ -1,8 +1,10 @@
-find_package(CHECK REQUIRED)
+find_package(CHECK)
 
 if(${CHECK_FOUND})
 	add_definitions(${CHECK_DEFINITIONS})
 	include_directories(${CHECK_INCLUDE_DIR})
 	enable_testing()
 	add_subdirectory(units)
+else()
+	message(FATAL_ERROR "Check Not Found!")
 endif()
