@@ -35,14 +35,14 @@ void http_response_free(HTTPResponse * resp) {
 
 char* get_header_from_response(const HTTPResponse* resp, const char header_name[])
 {
-	HTTPHeader * iter = resp->headers;
-	char * result = NULL;
+    HTTPHeader * iter = resp->headers;
+    char * result = NULL;
 
-	while (iter != NULL) {
-		if (strncmp(iter->name, header_name, strlen(iter->name)) == 0) {
-			result = iter->value;
-		}
-	}
+    while (iter != NULL) {
+        if (strncmp(iter->name, header_name, strlen(iter->name)) == 0) {
+            result = iter->value;
+        }
+    }
 
-	return result;
+    return result;
 }

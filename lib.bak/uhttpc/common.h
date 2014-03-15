@@ -11,8 +11,8 @@
 #define CF_UHTTPC_COMMON_H
 
 typedef struct {
-	char * name; /*!< HTTP Header Name */
-	char * value; /*!< HTTP Header Value */
+    char * name; /*!< HTTP Header Name */
+    char * value; /*!< HTTP Header Value */
 } HTTPHeader;
 
 #endif

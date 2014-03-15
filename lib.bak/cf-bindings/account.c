@@ -72,7 +72,7 @@ Account * authenticate ( Account * account, const char user_name[], const char a
     http_request * req = http_request_create();
     HTTPResponse * resp;
 
-	Account * ret = NULL;
+    Account * ret = NULL;
 
     unsigned char url_index = 0;
 

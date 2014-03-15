@@ -15,11 +15,13 @@
 struct container;
 
 typedef struct account {
-	char * username; /*!< Account Username */
-	char * api_key; /*!< Account API Key */
+    char * username; /*!< Account Username */
+    char * api_key; /*!< Account API Key */
 
-	struct container * containers; /*!< Account's Containers */
-	unsigned int container_count; /*!< Number of Containers on account */
+    char * token; /*!< Authentication Token */
+
+    struct container * containers; /*!< Account's Containers */
+    unsigned int container_count; /*!< Number of Containers on account */
 } Account;
 
 /**
@@ -44,7 +46,20 @@ Account * account_create(char * username, char * api_key);
  *
  * @param[in,out] account Pointer to the Account being freed will be NULL upon
  *                        return.
+ *
+ * @see account_create
  */
 void account_free(Account * account);
+
+/**
+ * @brief Authenticate an Account.
+ *
+ * Uses the API to determine if the contained username and API key are valid.
+ *
+ * @param[in] account Account structure to be authenticated and hold token.
+ *
+ * @return Account * to passed Account unless an error occurs, then NULL
+ */
+Account * authenticate(Account * account);
 
 #endif

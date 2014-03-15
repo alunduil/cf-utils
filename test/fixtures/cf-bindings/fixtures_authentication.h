@@ -14,10 +14,10 @@
 #include "../../../lib/uhttpc/response.h"
 
 typedef struct {
-	HTTPRequest * req; /*!< HTTP Request */
-	HTTPResponse * resp; /*!< HTTP Response */
+    HTTPRequest * req; /*!< HTTP Request */
+    HTTPResponse * resp; /*!< HTTP Response */
 
-	FixtureItem * next; /*!< Next Item in List */
+    FixtureItem * next; /*!< Next Item in List */
 } FixtureItem;
 
 /**

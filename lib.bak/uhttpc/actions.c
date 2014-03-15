@@ -12,11 +12,11 @@
 
 HTTPResponse* http(const http_request* req)
 {
-	char * url = req->url;
+    char * url = req->url;
 
-	HTTPResponse * resp = NULL;
+    HTTPResponse * resp = NULL;
 
-	free(url); /** @todo STUB! */
+    free(url); /** @todo STUB! */
 
-	return resp;
+    return resp;
 }

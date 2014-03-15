@@ -13,36 +13,40 @@
 #include "account.h"
 
 Account * account_create(char * username, char * api_key) {
-	Account * account = (Account *) malloc(sizeof(Account));
+    Account * account = (Account *) malloc(sizeof(Account));
 
-	if (username != NULL) {
-		account->username = (char *) malloc(sizeof(char) * strlen(username) + 1);
-		strcpy(account->username, username);
-	}
-	else
-	{
-		account->username = username;
-	}
+    if (username != NULL) {
+        account->username = (char *) malloc(sizeof(char) * strlen(username) + 1);
+        strcpy(account->username, username);
+    }
+    else
+    {
+        account->username = username;
+    }
 
-	if (api_key != NULL) {
-		account->api_key = (char *) malloc(sizeof(char) * strlen(api_key) + 1);
-		strcpy(account->api_key, api_key);
-	}
-	else
-	{
-		account->api_key = api_key;
-	}
+    if (api_key != NULL) {
+        account->api_key = (char *) malloc(sizeof(char) * strlen(api_key) + 1);
+        strcpy(account->api_key, api_key);
+    }
+    else
+    {
+        account->api_key = api_key;
+    }
 
-	account->containers = NULL;
-	account->container_count = 0;
+    account->containers = NULL;
+    account->container_count = 0;
 
-	return account;
+    return account;
 }
 
 void account_free(Account * account) {
-	free(account->username);
-	free(account->api_key);
-	free(account->containers);
+    free(account->username);
+    free(account->api_key);
+    free(account->containers);
 
-	free(account);
+    free(account);
+}
+
+Account* authenticate(Account* account) {
+    return account;
 }

@@ -4,6 +4,7 @@ compiler:
   - clang
 env:
   global:
+    - CK_VERBOSITY=verbose
   matrix:
 before_install:
   - sudo apt-get update
@@ -14,8 +15,8 @@ before_script:
   - cd build
   - cmake ..
 script:
+  - make
   - make test
-  - ctest -D Continuous
 after_success:
 after_failure:
 after_script:
