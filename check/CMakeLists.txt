@@ -1,4 +1,4 @@
-find_package(check REQUIRED)
+find_package(CHECK REQUIRED)
 
 if(${CHECK_FOUND})
 	add_definitions(${CHECK_DEFINITIONS})
