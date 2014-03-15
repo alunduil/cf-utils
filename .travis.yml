@@ -16,7 +16,7 @@ before_script:
   - cmake ..
 script:
   - make
-  - make test
+  - make check && make test
 after_success:
 after_failure:
 after_script:
