@@ -30,7 +30,7 @@ endif()
 
 if(NOT ${CHECK_FOUND} AND NOT ${PKG_CONFIG_FOUND})
 	find_path(CHECK_INCLUDE_DIRS
-		NAMES check.h check_stdint.h
+		NAMES check.h
 	)
 
 	find_library(CHECK_LIBRARIES check)
