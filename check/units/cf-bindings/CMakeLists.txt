@@ -1,4 +1,4 @@
-add_target_with_test(check_account)
-add_target_with_test(check_authentication)
-add_target_with_test(check_container)
-#add_target_with_test(check_object)
+check_add_test(check_account)
+check_add_test(check_authentication)
+check_add_test(check_container)
+#check_add_test(check_object)

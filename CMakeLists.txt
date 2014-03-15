@@ -16,5 +16,4 @@ endif()
 
 add_subdirectory(lib)
 
-enable_testing()
 add_subdirectory(check EXCLUDE_FROM_ALL)
