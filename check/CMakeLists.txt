@@ -13,4 +13,6 @@ if(${CHECK_FOUND})
 	endmacro()
 
 	add_subdirectory(units)
+else()
+	message("check not found")
 endif()
