@@ -13,7 +13,7 @@ install:
 before_script:
   - mkdir build
   - cd build
-  - cmake -Wdev ..
+  - cmake ..
 script:
   - make
   - make check && make test

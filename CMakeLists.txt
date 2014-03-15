@@ -10,7 +10,7 @@ set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -Wall -Wextra -Werror -pedantic"
 
 set(BUILD_SHARED_LIBS "YES")
 
-if(${CMAKE_BUILD_TYPE} EQUAL "Debug")
+if(${CMAKE_BUILD_TYPE} MATCHES "Debug")
 	set(CMAKE_VERBOSE_MAKEFILE True)
 endif()
 
