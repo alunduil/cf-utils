@@ -1,19 +1,22 @@
 cmake_minimum_required(VERSION 2.8)
-project(cf-utils C)
+project(cfutils C)
 
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules)
 
-set(CF_UTILS_VERSION 9999)
-string(REGEX REPLACE "[.][^.]*$" "" CF_LIB_VERSION ${CF_UTILS_VERSION})
+set(CFUTILS_MAJOR_VERSION 0)
+set(CFUTILS_MINOR_VERSION 0)
+set(CFUTILS_PATCH_VERSION 0)
+
+set(CFUTILS_VERSION "${CFUTILS_MAJOR_VERSION}.${CFUTILS_MINOR_VERSION}.${CFUTILS_PATCH_VERSION}")
 
 set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -Wall -Wextra -Werror -pedantic")
 
 set(BUILD_SHARED_LIBS "YES")
 
 if(${CMAKE_BUILD_TYPE} MATCHES "Debug")
-	set(CMAKE_VERBOSE_MAKEFILE True)
+  set(CMAKE_VERBOSE_MAKEFILE "YES")
 endif()
 
 add_subdirectory(lib)
 
-add_subdirectory(check EXCLUDE_FROM_ALL)
+add_subdirectory(tests EXCLUDE_FROM_ALL)
