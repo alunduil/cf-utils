@@ -49,10 +49,3 @@ if(NOT ${CHECK_FOUND} AND NOT ${PKG_CONFIG_FOUND})
 endif()
 
 mark_as_advanced(CHECK_INCLUDE_DIRS CHECK_LIBRARIES)
-
-macro(check_add_test CHECK_NAME)
-	add_executable(${CHECK_NAME} ${CHECK_NAME}.c)
-	target_link_libraries(${CHECK_NAME} ${CHECK_LIBRARIES})
-
-	add_test(${CHECK_NAME} ${EXECUTABLE_OUTPUT_PATH}/${CHECK_NAME})
-endmacro()

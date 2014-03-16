@@ -1,4 +1,8 @@
 check_add_test(check_account)
+add_dependencies(tests check_account)
 check_add_test(check_authentication)
+add_dependencies(tests check_authentication)
 check_add_test(check_container)
+add_dependencies(tests check_container)
 #check_add_test(check_object)
+#add_dependencies(tests check_object)

@@ -10,8 +10,8 @@
 #include <check.h>
 #include <stdlib.h>
 
-#include "../../../lib/cf-bindings/account.h"
-#include "../../../lib/cf-bindings/account.c"
+#include "../../../lib/cfbindings/account.h"
+#include "../../../lib/cfbindings/account.c"
 
 /**
  * @test account_create—produces a properly initialized account.

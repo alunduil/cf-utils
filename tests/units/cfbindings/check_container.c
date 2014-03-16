@@ -10,10 +10,10 @@
 #include <check.h>
 #include <stdlib.h>
 
-#include "../../../lib/cf-bindings/account.h"
+#include "../../../lib/cfbindings/account.h"
 
-#include "../../../lib/cf-bindings/container.h"
-#include "../../../lib/cf-bindings/container.c"
+#include "../../../lib/cfbindings/container.h"
+#include "../../../lib/cfbindings/container.c"
 
 /**
  * @test MAX_NUM_CONTAINERS 500000

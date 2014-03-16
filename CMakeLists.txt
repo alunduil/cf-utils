@@ -13,10 +13,7 @@ set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -Wall -Wextra -Werror -pedantic"
 
 set(BUILD_SHARED_LIBS "YES")
 
-if(${CMAKE_BUILD_TYPE} MATCHES "Debug")
-  set(CMAKE_VERBOSE_MAKEFILE "YES")
-endif()
-
 add_subdirectory(lib)
 
+enable_testing()
 add_subdirectory(tests EXCLUDE_FROM_ALL)
