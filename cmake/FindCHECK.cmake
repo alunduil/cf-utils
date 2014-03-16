@@ -6,12 +6,16 @@
 # https://github.com/swift-nav/libswiftnav/blob/master/cmake/FindCheck.cmake
 #
 # This module defines the following variables:
-# CHECK_INCLUDE_DIRS — where to find check.h and check_stdint.h
-# CHECK_LIBRARIES    — the libraries to link against to use check
-# CHECK_FOUND        — TRUE if found; otherwise, check should not be used
+# Check_INCLUDE_DIRS
+# Check_LIBRARIES
+# Check_DEFINITIONS
+# Check_CHECKMK_EXECUTABLE
+# Check_ROOT_DIR
+# Check_VERSION_09
+# Check_FOUND
 #
 # This module defines the following macros:
-# CHECK_ADD_TEST     — compile and link and add test given test name.
+# check_add_test
 #
 
 include(FindPkgConfig)

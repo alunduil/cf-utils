@@ -1,4 +1,6 @@
-find_package(CHECK)
+find_package(CHECK REQUIRED)
+
+message(STATUS "CHECK FOUND: ${CHECK_FOUND}")
 
 if(${CHECK_FOUND})
 	add_definitions(${CHECK_DEFINITIONS})

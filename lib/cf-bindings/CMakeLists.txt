@@ -12,3 +12,20 @@ install(TARGETS cf-bindings DESTINATION lib EXPORT cf-bindings-targets)
 install(EXPORT cf-bindings-targets DESTINATION share/${CMAKE_PROJECT_NAME}-${CF_UTILS_VERSION}}/cmake)
 
 export(TARGETS cf-bindings FILE cf-bindings-targets.cmake)
+
+configure_file(
+	${CMAKE_SOURCE_DIR}/pkg/cf-bindings-config.cmake.in
+	${CMAKE_BINARY_DIR}/pkg/cf-bindings-config.cmake
+	@ONLY
+)
+configure_file(
+	${CMAKE_SOURCE_DIR}/pkg/cf-bindings-config-version.cmake.in
+	${CMAKE_BINARY_DIR}/pkg/cf-bindings-config-version.cmake
+	@ONLY
+)
+
+install(FILES
+	${CMAKE_BINARY_DIR}/pkg/cf-bindings-config.cmake
+	${CMAKE_BINARY_DIR}/pkg/cf-bindings-config-version.cmake
+	DESTINATION lib/cf-bindings-${CF_UTILS_VERSION}
+)
